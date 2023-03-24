@@ -1,4 +1,4 @@
-# Change Log
+# Changelog
  
 ## [v0.1] - 2023-03-24
 Compared to Tan's Polling_systems_v5.5.1:
