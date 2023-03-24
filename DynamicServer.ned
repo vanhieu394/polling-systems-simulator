@@ -1,0 +1,11 @@
+simple DynamicServer
+{
+    parameters:
+        string switchingTime;			// Switching time of the queues
+        volatile double restTime;		// Rest time if all queues are empty in the same cycle
+        int numQueues;					// The number of the queues
+        @display("i=block/server");
+    gates:
+        inout in[numQueues];			// To the queues
+        output out;						// To the sink
+}
