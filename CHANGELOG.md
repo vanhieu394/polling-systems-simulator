@@ -1,5 +1,19 @@
 # Changelog
  
+## [v0.2] - 2023-04-18
+ 
+### Added
+ 
+### Fixed
+- This version's simulation result is now correct.
+- Increased the simulation speed.
+
+### Changed
+- Removed redundant variables.
+
+### Known Issues
+- In the queue module, cycleTime and sojTime contain a redundant first value.
+ 
 ## [v0.1] - 2023-03-24
 Compared to Tan's Polling_systems_v5.5.1:
  
@@ -17,3 +31,5 @@ Compared to Tan's Polling_systems_v5.5.1:
 
 ### Known Issues
 - The simulation speed is 2x slower than Tan's one.
+
+### Edited: WARNING - The simulation result of this version is NOT correct!!!
