@@ -9,9 +9,9 @@ class DynamicServer : public cSimpleModule {
 private:
     int numQueues;                             // The number of the queues
     int gateInId;                              // Index of the input gates
-    long int cycleNumber;                      // Total cycle number in the server
-    std::vector<int> a;                             // Will poll i-queue if a[i] = 1 and skip i-queue if a[i] = 0
-    std::vector<double> arrayDouble;                // Vector of switchingTime
+    std::vector<int> a;                        // Will poll i-queue if a[i] = 1 and skip i-queue if a[i] = 0
+    int sum;                                   // Sum of all a[i] values
+    std::vector<double> arrayDouble;           // Vector of switchingTime
 
     simtime_t beginOfCycle;                    // The begin of cycle moment
     simtime_t currCycleTime;                   // The duration of the current cycle
@@ -52,7 +52,7 @@ DynamicServer::~DynamicServer(){
 void DynamicServer::initialize(){
     numQueues = par("numQueues");
     gateInId = 0;
-    cycleNumber = 0;
+    sum = 0;
 
     for (int i = 0; i < numQueues; i++)
         a.push_back(1);
@@ -71,19 +71,19 @@ void DynamicServer::initialize(){
 }
 void DynamicServer::finish(){
     recordScalar("Mean cycle time in the server", cycleTime.getMean());
-    recordScalar("Number of cycle", cycleTime.getCount()-1);
+    recordScalar("Number of cycle", cycleTime.getCount());
 }
 void DynamicServer::handleMessage(cMessage *msg){
     // Start a new cycle
     if (msg == startCycleEvent) {
         beginOfCycle = simTime();
-        int sum = 0;
+        sum = 0;
         for (int i = 0; i < numQueues; i++)
             sum += a[i];
 
-        // If all queues are empty,
-        // reset a[i] to 1 for all queues to serve them all in the next cycle
-        // after that, server will take a rest
+        EV << "Begin of cycle " << cycleTime.getCount()+1 << "\n";
+
+        // Check if all queues are empty
         if (sum == 0) {
             for (int i = 0; i < numQueues; i++)
                 a[i] = 1;
@@ -98,7 +98,9 @@ void DynamicServer::handleMessage(cMessage *msg){
         // Collect the statistics
         currCycleTime = simTime() - beginOfCycle;
         cycleTime.collect(currCycleTime);
-        cycleNumber++;
+
+        EV << "End of cycle " << cycleTime.getCount() << "\n";
+
         scheduleAt(simTime(), startCycleEvent);
     }
 
@@ -114,45 +116,44 @@ void DynamicServer::handleMessage(cMessage *msg){
         else {
             a[gateInId] = 1;
             gateInId = (gateInId + 1) % numQueues;
-            scheduleAt(simTime(), serviceEvent);
+            if(gateInId == 0)
+                scheduleAt(simTime(), stopCycleEvent);
+            else
+                scheduleAt(simTime(), serviceEvent);
         }
     }
 
     // Switch to the queue
-    else if (msg == switchToQueueEvent) {
-        send(new cMessage("Server is ready"), "in$o", gateInId);
-    }
+    else if (msg == switchToQueueEvent)
+        send(new cMessage("Polling"), "in$o", gateInId);
 
     // If the queue is empty
     else if (msg->getFullName() == empty) {
         a[msg->getKind()] = 0;
         gateInId = (msg->getKind() + 1) % numQueues;
         delete(msg);
-        if(gateInId == 0) {
+
+        if(gateInId == 0)
             scheduleAt(simTime(), stopCycleEvent);
-        }
-        else {
+        else
             scheduleAt(simTime(), serviceEvent);
-        }
     }
 
     // If the queue is fully serviced, switch to another queue
     else if (msg->getFullName() == done) {
         gateInId = (msg->getKind() + 1) % numQueues;
         delete(msg);
-        if(gateInId == 0) {
+
+        if(gateInId == 0)
             scheduleAt(simTime(), stopCycleEvent);
-        }
-        else {
+        else
             scheduleAt(simTime(), serviceEvent);
-        }
     }
 
     // Send out the serviced packets to the sink immediately
     // because they were serviced in the queue module
-    else {
+    else
         send(msg,"out");
-    }
 }
 
 
