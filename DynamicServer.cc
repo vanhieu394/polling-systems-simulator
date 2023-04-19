@@ -9,8 +9,8 @@ class DynamicServer : public cSimpleModule {
 private:
     int numQueues;                             // The number of the queues
     int gateInId;                              // Index of the input gates
-    std::vector<int> a;                        // Will poll i-queue if a[i] = 1 and skip i-queue if a[i] = 0
-    int sum;                                   // Sum of all a[i] values
+    std::vector<int> q;                        // Will poll i-queue if q[i] = 1 and skip i-queue if q[i] = 0
+    int sum;                                   // Sum of all q[i] values
     std::vector<double> arrayDouble;           // Vector of switchingTime
 
     simtime_t beginOfCycle;                    // The begin of cycle moment
@@ -55,7 +55,7 @@ void DynamicServer::initialize(){
     sum = 0;
 
     for (int i = 0; i < numQueues; i++)
-        a.push_back(1);
+        q.push_back(1);
     const char* arrayString = par("switchingTime").stringValue();
     arrayDouble = cStringTokenizer(arrayString).asDoubleVector();
 
@@ -79,14 +79,14 @@ void DynamicServer::handleMessage(cMessage *msg){
         beginOfCycle = simTime();
         sum = 0;
         for (int i = 0; i < numQueues; i++)
-            sum += a[i];
+            sum += q[i];
 
         EV << "Begin of cycle " << cycleTime.getCount()+1 << "\n";
 
         // Check if all queues are empty
         if (sum == 0) {
             for (int i = 0; i < numQueues; i++)
-                a[i] = 1;
+                q[i] = 1;
             scheduleAt(simTime() + par("restTime"), stopCycleEvent);
         }
         else
@@ -106,15 +106,15 @@ void DynamicServer::handleMessage(cMessage *msg){
 
     // Start servicing
     else if (msg == serviceEvent) {
-        // If a[i] = 1, switch to this queue to service it
-        if (a[gateInId] == 1) {
+        // If q[i] = 1, switch to this queue to service it
+        if (q[gateInId] == 1) {
             double switchingTime = exponential(arrayDouble[gateInId]);
             scheduleAt(simTime() + switchingTime, switchToQueueEvent);
         }
 
-        // If a[i] = 0, set it to 1, then skip this queue
+        // If q[i] = 0, set it to 1, then skip this queue
         else {
-            a[gateInId] = 1;
+            q[gateInId] = 1;
             gateInId = (gateInId + 1) % numQueues;
             if(gateInId == 0)
                 scheduleAt(simTime(), stopCycleEvent);
@@ -129,7 +129,7 @@ void DynamicServer::handleMessage(cMessage *msg){
 
     // If the queue is empty
     else if (msg->getFullName() == empty) {
-        a[msg->getKind()] = 0;
+        q[msg->getKind()] = 0;
         gateInId = (msg->getKind() + 1) % numQueues;
         delete(msg);
 

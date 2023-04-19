@@ -9,6 +9,7 @@ private:
     cQueue buffer;                      // Buffer to save all packets
     int n;                              // Buffer's current length
     int ownIndex;                       // Queue's index
+    long int cycleNumber;               // Current cycle number
 
     simtime_t pollingMoment;            // The last polling moment of this queue
     simtime_t leavingMoment;            // The moment when server completes serving this queue and leaves it
@@ -50,6 +51,7 @@ DynamicExhausedQueue::~DynamicExhausedQueue(){
 void DynamicExhausedQueue::initialize(){
     n = 0;
     ownIndex = par("ownIndex");
+    cycleNumber = 0;
 
     pollingMoment = 0;
     leavingMoment = 0;
@@ -64,17 +66,29 @@ void DynamicExhausedQueue::finish(){
     recordScalar("Mean sojourn time in DynamicExhausedQueue", sojTime.getMean());
     recordScalar("Mean cycle time in DynamicExhausedQueue", cycleTime.getMean());
     recordScalar("Mean intervisit time in DynamicExhausedQueue", intervisitTime.getMean());
-    recordScalar("Number of cycle in DynamicExhausedQueue", cycleTime.getCount()-1);
+    recordScalar("Number of cycle in DynamicExhausedQueue", cycleTime.getCount());
 }
 
 void DynamicExhausedQueue::handleMessage(cMessage *msg){
     // Receive "Polling" message from the server
     if(msg->arrivedOn("out$i")) {
-        // Collect the statistics
-        intervisitTime.collect(simTime() - leavingMoment);
-        cycleTime.collect(simTime() - pollingMoment);
+        // Collect the statistics from cycle 2
+        cycleNumber++;
+        if (cycleNumber > 1){
+            intervisitTime.collect(simTime() - leavingMoment);
+            cycleTime.collect(simTime() - pollingMoment);
+        }
+
         pollingMoment = simTime();
         delete msg;
+
+        // Print out the stats
+        EV << "Mean cycle time in Q[" << ownIndex << "] = "
+                << cycleTime.getMean() << "\n";
+        EV << "Mean intervisit time in Q[" << ownIndex << "] = "
+                << intervisitTime.getMean() << "\n";
+        EV << "Current cycle in Q[" << ownIndex << "] = "
+                << cycleNumber << "\n";
 
         n = buffer.getLength();
         if (n == 0) {
