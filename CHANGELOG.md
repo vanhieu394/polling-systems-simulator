@@ -1,8 +1,11 @@
 # Changelog
+
+## [v0.3] - 2023-04-19
  
+### Fixed
+- Removed the redundant first value of the cycleTime and sojTime in queue module.
+
 ## [v0.2] - 2023-04-18
- 
-### Added
  
 ### Fixed
 - This version's simulation result is now correct.
@@ -25,10 +28,7 @@ Compared to Tan's Polling_systems_v5.5.1:
 - Updated code to be compatible with OMNeT++ version 6.0.1.
 - The name of files, classes, variables, functions... are edited to follow the naming convention.
 - The code structure is rearranged.
-
-### Fixed
-
-
+- 
 ### Known Issues
 - The simulation speed is 2x slower than Tan's one.
 
