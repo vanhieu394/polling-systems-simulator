@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.4] - 2023-04-25
+ 
+### Added
+- Added the monitor module that can mesure probability of all system states when queue number = 2.
+- Added new message type (StateMessage) to transfer state info from server and queues to the monitor.
+ 
+### Changed
+- Updated server and queue module code.
+- Renamed scalar result file in the omnetpp.ini.
+
 ## [v0.3] - 2023-04-19
  
 ### Fixed
@@ -28,7 +38,7 @@ Compared to Tan's Polling_systems_v5.5.1:
 - Updated code to be compatible with OMNeT++ version 6.0.1.
 - The name of files, classes, variables, functions... are edited to follow the naming convention.
 - The code structure is rearranged.
-- 
+
 ### Known Issues
 - The simulation speed is 2x slower than Tan's one.
 
