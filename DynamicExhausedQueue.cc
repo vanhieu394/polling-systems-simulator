@@ -1,4 +1,6 @@
 #include <omnetpp.h>
+#include <StateMessage_m.h>
+
 using namespace omnetpp;
 
 //#define OMNETPP_VERSION 0x600 // ver 6.0.1 - major*256+minor
@@ -35,20 +37,21 @@ protected:
 
 Define_Module(DynamicExhausedQueue);
 
-DynamicExhausedQueue::DynamicExhausedQueue(){
+DynamicExhausedQueue::DynamicExhausedQueue() {
     takePacketEvent = nullptr;
     packetServiceEvent = nullptr;
     checkQueueEvent = nullptr;
     pkt = nullptr;
 }
 
-DynamicExhausedQueue::~DynamicExhausedQueue(){
+DynamicExhausedQueue::~DynamicExhausedQueue() {
     cancelAndDelete(takePacketEvent);
     cancelAndDelete(packetServiceEvent);
     cancelAndDelete(checkQueueEvent);
 }
 
-void DynamicExhausedQueue::initialize(){
+void DynamicExhausedQueue::initialize() {
+    buffer.setName("buffer");
     n = 0;
     ownIndex = par("ownIndex");
     cycleNumber = 0;
@@ -61,7 +64,7 @@ void DynamicExhausedQueue::initialize(){
     checkQueueEvent = new cMessage("Checking queue");
 }
 
-void DynamicExhausedQueue::finish(){
+void DynamicExhausedQueue::finish() {
     recordScalar("Mean waiting time in DynamicExhausedQueue", waitingTime.getMean());
     recordScalar("Mean sojourn time in DynamicExhausedQueue", sojTime.getMean());
     recordScalar("Mean cycle time in DynamicExhausedQueue", cycleTime.getMean());
@@ -69,12 +72,12 @@ void DynamicExhausedQueue::finish(){
     recordScalar("Number of cycle in DynamicExhausedQueue", cycleTime.getCount());
 }
 
-void DynamicExhausedQueue::handleMessage(cMessage *msg){
+void DynamicExhausedQueue::handleMessage(cMessage *msg) {
     // Receive "Polling" message from the server
-    if(msg->arrivedOn("out$i")) {
+    if (msg->arrivedOn("server$i")) {
         // Collect the statistics from cycle 2
         cycleNumber++;
-        if (cycleNumber > 1){
+        if (cycleNumber > 1) {
             intervisitTime.collect(simTime() - leavingMoment);
             cycleTime.collect(simTime() - pollingMoment);
         }
@@ -82,21 +85,29 @@ void DynamicExhausedQueue::handleMessage(cMessage *msg){
         pollingMoment = simTime();
         delete msg;
 
-        // Print out the stats
-        EV << "Mean cycle time in Q[" << ownIndex << "] = "
-                << cycleTime.getMean() << "\n";
-        EV << "Mean intervisit time in Q[" << ownIndex << "] = "
-                << intervisitTime.getMean() << "\n";
-        EV << "Current cycle in Q[" << ownIndex << "] = "
-                << cycleNumber << "\n";
+//        // Print out the stats
+//        EV << "Mean cycle time in Q[" << ownIndex << "] = "
+//                << cycleTime.getMean() << "\n";
+//        EV << "Mean intervisit time in Q[" << ownIndex << "] = "
+//                << intervisitTime.getMean() << "\n";
+//        EV << "Current cycle in Q[" << ownIndex << "] = "
+//                << cycleNumber << "\n";
 
         n = buffer.getLength();
         if (n == 0) {
             // Send "Queue is empty" msg to the server
-            send(new cMessage("Queue is empty", ownIndex), "out$o");
+            send(new cMessage("Queue is empty", ownIndex), "server$o");
             leavingMoment = simTime();
         }
         else {
+            // Update system state
+            StateMessage *stateMsg = new StateMessage("SERVICING phase");
+            stateMsg->setMsgType(SET_SERVER_PHASE);
+            stateMsg->setServerPhase(SERVICING);
+            stateMsg->setI(ownIndex);
+            send(stateMsg, "toMonitor");
+
+            // Start servicing
             scheduleAt(simTime(), takePacketEvent);
         }
     }
@@ -117,8 +128,15 @@ void DynamicExhausedQueue::handleMessage(cMessage *msg){
         sojTime.collect(simTime() - pkt->getCreationTime());
 
         // Send out the packet to the server
-        send(pkt,"out$o");
+        send(pkt, "server$o");
         n--;
+
+        // Send msg to the monitor to update system state
+        StateMessage *stateMsg = new StateMessage("Set n[i]");
+        stateMsg->setMsgType(SET_N);
+        stateMsg->setI(ownIndex);
+        stateMsg->setN(buffer.getLength());
+        send(stateMsg, "toMonitor");
 
         if (n == 0) {
             scheduleAt(simTime(), checkQueueEvent);
@@ -133,7 +151,7 @@ void DynamicExhausedQueue::handleMessage(cMessage *msg){
     else if (msg == checkQueueEvent) {
         n = buffer.getLength();
         if (n == 0) {
-            send(new cMessage("Queue is serviced", ownIndex), "out$o");
+            send(new cMessage("Queue is serviced", ownIndex), "server$o");
             leavingMoment = simTime();
         }
         else {
@@ -144,5 +162,12 @@ void DynamicExhausedQueue::handleMessage(cMessage *msg){
     // Insert packets from the generator to the buffer
     else {
         buffer.insert(msg);
+
+        // Send msg to the monitor to update system state
+        StateMessage *stateMsg = new StateMessage("Set n[i]");
+        stateMsg->setMsgType(SET_N);
+        stateMsg->setI(ownIndex);
+        stateMsg->setN(buffer.getLength());
+        send(stateMsg, "toMonitor");
     }
 }

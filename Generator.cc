@@ -33,8 +33,7 @@ void Generator::initialize(){
 
 void Generator::handleMessage(cMessage *msg){
     // Create and send packet
-    cMessage *pkt;
-    pkt = new cMessage("packet");
+    cMessage *pkt = new cMessage("packet");
     send(pkt, "out");
 
     // Schedule the new packet generating

@@ -17,14 +17,22 @@ network DynamicExhausedPollingSystem
             numQueues = parent.numQueues;
             @display("p=300,100");
         }
+        
         sink: Sink {
             @display("p=100,100");
+        }
+        
+        monitor: Monitor {
+            numQueues = parent.numQueues;
+            @display("p=300,200");
         }
 
     connections:
         for i=0..numQueues-1 {
             generator[i].out --> dynamicExhausedQueue[i].in;
-            dynamicExhausedQueue[i].out <--> dynamicServer.in[i];
+            dynamicExhausedQueue[i].server <--> dynamicServer.queue[i];
+            dynamicExhausedQueue[i].toMonitor --> monitor.fromQueue[i];
         }
-        dynamicServer.out --> sink.in;
+        dynamicServer.toMonitor --> monitor.fromServer;
+        dynamicServer.toSink --> sink.in;
 }

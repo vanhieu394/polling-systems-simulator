@@ -3,7 +3,7 @@
 
 using namespace omnetpp;
 
-class Sink: public cSimpleModule{
+class Sink: public cSimpleModule {
 private:
     // online stats
     int x = 0;
@@ -25,9 +25,9 @@ protected:
     virtual void handleMessage(cMessage *msg);
 };
 Define_Module(Sink);
-Sink::Sink(){
+Sink::Sink() {
 }
-Sink::~Sink(){
+Sink::~Sink() {
 }
 void Sink::initialize() {
     sojTimeStats.setName("Total sojourn time");
@@ -56,11 +56,10 @@ void Sink::handleMessage(cMessage *msg) {
 
     W_i_1 = W_i;
     W_i = sojTimeStats.getMean();
-    if (fabs(W_i - W_i_1)/W_i < pow(10,-13))
-        {
+    if (fabs(W_i - W_i_1)/W_i < pow(10,-13)) {
             time = time + clock() - time2;
             endSimulation();
-        }
+    }
     //delete msg
     delete(msg);
 }

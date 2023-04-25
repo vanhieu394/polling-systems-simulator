@@ -6,6 +6,7 @@ simple DynamicServer
         int numQueues;					// The number of the queues
         @display("i=block/server");
     gates:
-        inout in[numQueues];			// To the queues
-        output out;						// To the sink
+        inout queue[numQueues];			// To the queues
+        output toMonitor;				// To the monitor
+        output toSink;					// To the sink
 }

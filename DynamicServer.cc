@@ -1,4 +1,6 @@
 #include <omnetpp.h>
+#include <StateMessage_m.h>
+
 using namespace omnetpp;
 
 //using namespace std;
@@ -9,11 +11,12 @@ class DynamicServer : public cSimpleModule {
 private:
     int numQueues;                             // The number of the queues
     int gateInId;                              // Index of the input gates
-    std::vector<int> q;                        // Will poll i-queue if q[i] = 1 and skip i-queue if q[i] = 0
     int sum;                                   // Sum of all q[i] values
+
+    std::vector<int> q;                        // Will poll i-queue if q[i] = 1 and skip i-queue if q[i] = 0
     std::vector<double> arrayDouble;           // Vector of switchingTime
 
-    simtime_t beginOfCycle;                    // The begin of cycle moment
+    simtime_t startOfCycle;                    // The start of cycle moment
     simtime_t currCycleTime;                   // The duration of the current cycle
 
     cMessage *startCycleEvent;                 // Start a new cycle
@@ -37,7 +40,7 @@ protected:
 
 Define_Module(DynamicServer);
 
-DynamicServer::DynamicServer(){
+DynamicServer::DynamicServer() {
     startCycleEvent = nullptr;
     serviceEvent = nullptr;
     switchToQueueEvent = nullptr;
@@ -49,7 +52,7 @@ DynamicServer::~DynamicServer(){
     cancelAndDelete(switchToQueueEvent);
     cancelAndDelete(stopCycleEvent);
 }
-void DynamicServer::initialize(){
+void DynamicServer::initialize() {
     numQueues = par("numQueues");
     gateInId = 0;
     sum = 0;
@@ -59,7 +62,7 @@ void DynamicServer::initialize(){
     const char* arrayString = par("switchingTime").stringValue();
     arrayDouble = cStringTokenizer(arrayString).asDoubleVector();
 
-    beginOfCycle = 0;
+    startOfCycle = 0;
     currCycleTime = 0;
 
     startCycleEvent = new cMessage("Starting a new cycle");
@@ -69,24 +72,39 @@ void DynamicServer::initialize(){
 
     scheduleAt(simTime(), startCycleEvent);
 }
-void DynamicServer::finish(){
+void DynamicServer::finish() {
     recordScalar("Mean cycle time in the server", cycleTime.getMean());
     recordScalar("Number of cycle", cycleTime.getCount());
 }
-void DynamicServer::handleMessage(cMessage *msg){
+void DynamicServer::handleMessage(cMessage *msg) {
     // Start a new cycle
     if (msg == startCycleEvent) {
-        beginOfCycle = simTime();
+        startOfCycle = simTime();
         sum = 0;
         for (int i = 0; i < numQueues; i++)
             sum += q[i];
 
-        EV << "Begin of cycle " << cycleTime.getCount()+1 << "\n";
+        EV << "Start of cycle " << cycleTime.getCount()+1 << "\n";
 
         // Check if all queues are empty
         if (sum == 0) {
-            for (int i = 0; i < numQueues; i++)
+            // Jump to idling phase and reset all q[i] to 1
+            StateMessage *stateMsg = new StateMessage("IDLING phase");
+            stateMsg->setMsgType(SET_SERVER_PHASE);
+            stateMsg->setServerPhase(IDLING);
+            send(stateMsg, "toMonitor");
+
+            for (int i = 0; i < numQueues; i++){
                 q[i] = 1;
+
+//                // Update system state
+//                StateMessage *stateMsg = new StateMessage("Set q[i] = 1");
+//                stateMsg->setMsgType(SET_Q);
+//                stateMsg->setI(i);
+//                stateMsg->setQ(1);
+//                send(stateMsg, "toMonitor");
+            }
+
             scheduleAt(simTime() + par("restTime"), stopCycleEvent);
         }
         else
@@ -96,7 +114,7 @@ void DynamicServer::handleMessage(cMessage *msg){
     // End of cycle
     else if(msg == stopCycleEvent) {
         // Collect the statistics
-        currCycleTime = simTime() - beginOfCycle;
+        currCycleTime = simTime() - startOfCycle;
         cycleTime.collect(currCycleTime);
 
         EV << "End of cycle " << cycleTime.getCount() << "\n";
@@ -106,15 +124,30 @@ void DynamicServer::handleMessage(cMessage *msg){
 
     // Start servicing
     else if (msg == serviceEvent) {
-        // If q[i] = 1, switch to this queue to service it
         if (q[gateInId] == 1) {
+            // Update system state
+            StateMessage *stateMsg = new StateMessage("CONNECTING phase");
+            stateMsg->setMsgType(SET_SERVER_PHASE);
+            stateMsg->setServerPhase(CONNECTING);
+            stateMsg->setI(gateInId);
+            send(stateMsg, "toMonitor");
+
+            // Switch to this queue
             double switchingTime = exponential(arrayDouble[gateInId]);
             scheduleAt(simTime() + switchingTime, switchToQueueEvent);
         }
 
-        // If q[i] = 0, set it to 1, then skip this queue
+        // If q[i] = 0, reset it to 1, then skip this queue
         else {
             q[gateInId] = 1;
+
+            // Update system state
+            StateMessage *stateMsg = new StateMessage("Set q[i] = 1");
+            stateMsg->setMsgType(SET_Q);
+            stateMsg->setI(gateInId);
+            stateMsg->setQ(1);
+            send(stateMsg, "toMonitor");
+
             gateInId = (gateInId + 1) % numQueues;
             if(gateInId == 0)
                 scheduleAt(simTime(), stopCycleEvent);
@@ -123,13 +156,21 @@ void DynamicServer::handleMessage(cMessage *msg){
         }
     }
 
-    // Switch to the queue
+    // Poll the queue
     else if (msg == switchToQueueEvent)
-        send(new cMessage("Polling"), "in$o", gateInId);
+        send(new cMessage("Polling"), "queue$o", gateInId);
 
-    // If the queue is empty
+    // If the queue is empty, set q[i] = 0 and jump to the next one
     else if (msg->getFullName() == empty) {
         q[msg->getKind()] = 0;
+
+        // Update system state
+        StateMessage *stateMsg = new StateMessage("Set q[i] = 0");
+        stateMsg->setMsgType(SET_Q);
+        stateMsg->setI(msg->getKind());
+        stateMsg->setQ(0);
+        send(stateMsg, "toMonitor");
+
         gateInId = (msg->getKind() + 1) % numQueues;
         delete(msg);
 
@@ -153,7 +194,7 @@ void DynamicServer::handleMessage(cMessage *msg){
     // Send out the serviced packets to the sink immediately
     // because they were serviced in the queue module
     else
-        send(msg,"out");
+        send(msg, "toSink");
 }
 
 
