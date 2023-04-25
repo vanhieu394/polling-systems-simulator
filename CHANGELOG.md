@@ -3,7 +3,7 @@
 ## [v0.4] - 2023-04-25
  
 ### Added
-- Added the monitor module that can mesure probability of all system states when queue number = 2.
+- Added the monitor module that can measure probability of all system states when queue number = 2.
 - Added new message type (StateMessage) to transfer state info from server and queues to the monitor.
  
 ### Changed
