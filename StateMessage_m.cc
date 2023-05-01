@@ -181,9 +181,9 @@ void StateMessage::copy(const StateMessage& other)
 {
     this->msgType = other.msgType;
     this->serverPhase = other.serverPhase;
-    this->i = other.i;
-    this->n = other.n;
+    this->queueIndex = other.queueIndex;
     this->q = other.q;
+    this->n = other.n;
 }
 
 void StateMessage::parsimPack(omnetpp::cCommBuffer *b) const
@@ -191,9 +191,9 @@ void StateMessage::parsimPack(omnetpp::cCommBuffer *b) const
     ::omnetpp::cMessage::parsimPack(b);
     doParsimPacking(b,this->msgType);
     doParsimPacking(b,this->serverPhase);
-    doParsimPacking(b,this->i);
-    doParsimPacking(b,this->n);
+    doParsimPacking(b,this->queueIndex);
     doParsimPacking(b,this->q);
+    doParsimPacking(b,this->n);
 }
 
 void StateMessage::parsimUnpack(omnetpp::cCommBuffer *b)
@@ -201,9 +201,9 @@ void StateMessage::parsimUnpack(omnetpp::cCommBuffer *b)
     ::omnetpp::cMessage::parsimUnpack(b);
     doParsimUnpacking(b,this->msgType);
     doParsimUnpacking(b,this->serverPhase);
-    doParsimUnpacking(b,this->i);
-    doParsimUnpacking(b,this->n);
+    doParsimUnpacking(b,this->queueIndex);
     doParsimUnpacking(b,this->q);
+    doParsimUnpacking(b,this->n);
 }
 
 MsgType StateMessage::getMsgType() const
@@ -226,24 +226,14 @@ void StateMessage::setServerPhase(ServerPhase serverPhase)
     this->serverPhase = serverPhase;
 }
 
-int StateMessage::getI() const
+int StateMessage::getQueueIndex() const
 {
-    return this->i;
+    return this->queueIndex;
 }
 
-void StateMessage::setI(int i)
+void StateMessage::setQueueIndex(int queueIndex)
 {
-    this->i = i;
-}
-
-int StateMessage::getN() const
-{
-    return this->n;
-}
-
-void StateMessage::setN(int n)
-{
-    this->n = n;
+    this->queueIndex = queueIndex;
 }
 
 int StateMessage::getQ() const
@@ -256,6 +246,16 @@ void StateMessage::setQ(int q)
     this->q = q;
 }
 
+int StateMessage::getN() const
+{
+    return this->n;
+}
+
+void StateMessage::setN(int n)
+{
+    this->n = n;
+}
+
 class StateMessageDescriptor : public omnetpp::cClassDescriptor
 {
   private:
@@ -263,9 +263,9 @@ class StateMessageDescriptor : public omnetpp::cClassDescriptor
     enum FieldConstants {
         FIELD_msgType,
         FIELD_serverPhase,
-        FIELD_i,
-        FIELD_n,
+        FIELD_queueIndex,
         FIELD_q,
+        FIELD_n,
     };
   public:
     StateMessageDescriptor();
@@ -346,9 +346,9 @@ unsigned int StateMessageDescriptor::getFieldTypeFlags(int field) const
     static unsigned int fieldTypeFlags[] = {
         0,    // FIELD_msgType
         0,    // FIELD_serverPhase
-        FD_ISEDITABLE,    // FIELD_i
-        FD_ISEDITABLE,    // FIELD_n
+        FD_ISEDITABLE,    // FIELD_queueIndex
         FD_ISEDITABLE,    // FIELD_q
+        FD_ISEDITABLE,    // FIELD_n
     };
     return (field >= 0 && field < 5) ? fieldTypeFlags[field] : 0;
 }
@@ -364,9 +364,9 @@ const char *StateMessageDescriptor::getFieldName(int field) const
     static const char *fieldNames[] = {
         "msgType",
         "serverPhase",
-        "i",
-        "n",
+        "queueIndex",
         "q",
+        "n",
     };
     return (field >= 0 && field < 5) ? fieldNames[field] : nullptr;
 }
@@ -377,9 +377,9 @@ int StateMessageDescriptor::findField(const char *fieldName) const
     int baseIndex = base ? base->getFieldCount() : 0;
     if (strcmp(fieldName, "msgType") == 0) return baseIndex + 0;
     if (strcmp(fieldName, "serverPhase") == 0) return baseIndex + 1;
-    if (strcmp(fieldName, "i") == 0) return baseIndex + 2;
-    if (strcmp(fieldName, "n") == 0) return baseIndex + 3;
-    if (strcmp(fieldName, "q") == 0) return baseIndex + 4;
+    if (strcmp(fieldName, "queueIndex") == 0) return baseIndex + 2;
+    if (strcmp(fieldName, "q") == 0) return baseIndex + 3;
+    if (strcmp(fieldName, "n") == 0) return baseIndex + 4;
     return base ? base->findField(fieldName) : -1;
 }
 
@@ -394,9 +394,9 @@ const char *StateMessageDescriptor::getFieldTypeString(int field) const
     static const char *fieldTypeStrings[] = {
         "MsgType",    // FIELD_msgType
         "ServerPhase",    // FIELD_serverPhase
-        "int",    // FIELD_i
-        "int",    // FIELD_n
+        "int",    // FIELD_queueIndex
         "int",    // FIELD_q
+        "int",    // FIELD_n
     };
     return (field >= 0 && field < 5) ? fieldTypeStrings[field] : nullptr;
 }
@@ -497,9 +497,9 @@ std::string StateMessageDescriptor::getFieldValueAsString(omnetpp::any_ptr objec
     switch (field) {
         case FIELD_msgType: return enum2string(pp->getMsgType(), "MsgType");
         case FIELD_serverPhase: return enum2string(pp->getServerPhase(), "ServerPhase");
-        case FIELD_i: return long2string(pp->getI());
-        case FIELD_n: return long2string(pp->getN());
+        case FIELD_queueIndex: return long2string(pp->getQueueIndex());
         case FIELD_q: return long2string(pp->getQ());
+        case FIELD_n: return long2string(pp->getN());
         default: return "";
     }
 }
@@ -516,9 +516,9 @@ void StateMessageDescriptor::setFieldValueAsString(omnetpp::any_ptr object, int 
     }
     StateMessage *pp = omnetpp::fromAnyPtr<StateMessage>(object); (void)pp;
     switch (field) {
-        case FIELD_i: pp->setI(string2long(value)); break;
-        case FIELD_n: pp->setN(string2long(value)); break;
+        case FIELD_queueIndex: pp->setQueueIndex(string2long(value)); break;
         case FIELD_q: pp->setQ(string2long(value)); break;
+        case FIELD_n: pp->setN(string2long(value)); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'StateMessage'", field);
     }
 }
@@ -535,9 +535,9 @@ omnetpp::cValue StateMessageDescriptor::getFieldValue(omnetpp::any_ptr object, i
     switch (field) {
         case FIELD_msgType: return static_cast<int>(pp->getMsgType());
         case FIELD_serverPhase: return static_cast<int>(pp->getServerPhase());
-        case FIELD_i: return pp->getI();
-        case FIELD_n: return pp->getN();
+        case FIELD_queueIndex: return pp->getQueueIndex();
         case FIELD_q: return pp->getQ();
+        case FIELD_n: return pp->getN();
         default: throw omnetpp::cRuntimeError("Cannot return field %d of class 'StateMessage' as cValue -- field index out of range?", field);
     }
 }
@@ -554,9 +554,9 @@ void StateMessageDescriptor::setFieldValue(omnetpp::any_ptr object, int field, i
     }
     StateMessage *pp = omnetpp::fromAnyPtr<StateMessage>(object); (void)pp;
     switch (field) {
-        case FIELD_i: pp->setI(omnetpp::checked_int_cast<int>(value.intValue())); break;
-        case FIELD_n: pp->setN(omnetpp::checked_int_cast<int>(value.intValue())); break;
+        case FIELD_queueIndex: pp->setQueueIndex(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_q: pp->setQ(omnetpp::checked_int_cast<int>(value.intValue())); break;
+        case FIELD_n: pp->setN(omnetpp::checked_int_cast<int>(value.intValue())); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'StateMessage'", field);
     }
 }

@@ -104,7 +104,7 @@ void DynamicExhausedQueue::handleMessage(cMessage *msg) {
             StateMessage *stateMsg = new StateMessage("SERVICING phase");
             stateMsg->setMsgType(SET_SERVER_PHASE);
             stateMsg->setServerPhase(SERVICING);
-            stateMsg->setI(ownIndex);
+            stateMsg->setQueueIndex(ownIndex);
             send(stateMsg, "toMonitor");
 
             // Start servicing
@@ -134,7 +134,7 @@ void DynamicExhausedQueue::handleMessage(cMessage *msg) {
         // Send msg to the monitor to update system state
         StateMessage *stateMsg = new StateMessage("Set n[i]");
         stateMsg->setMsgType(SET_N);
-        stateMsg->setI(ownIndex);
+        stateMsg->setQueueIndex(ownIndex);
         stateMsg->setN(buffer.getLength());
         send(stateMsg, "toMonitor");
 
@@ -166,7 +166,7 @@ void DynamicExhausedQueue::handleMessage(cMessage *msg) {
         // Send msg to the monitor to update system state
         StateMessage *stateMsg = new StateMessage("Set n[i]");
         stateMsg->setMsgType(SET_N);
-        stateMsg->setI(ownIndex);
+        stateMsg->setQueueIndex(ownIndex);
         stateMsg->setN(buffer.getLength());
         send(stateMsg, "toMonitor");
     }

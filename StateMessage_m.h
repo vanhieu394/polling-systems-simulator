@@ -64,9 +64,9 @@ inline void doParsimUnpacking(omnetpp::cCommBuffer *b, ServerPhase& e) { int n; 
  * {
  *     MsgType msgType;			// Msg's type
  *     ServerPhase serverPhase;	// Server phase
- *     int i;						// Queue's index
- *     int n;						// Number of packets in queue
+ *     int queueIndex;				// Queue's index
  *     int q;						// Queue's flag
+ *     int n;						// Number of packets in queue
  * }
  * </pre>
  */
@@ -75,9 +75,9 @@ class StateMessage : public ::omnetpp::cMessage
   protected:
     MsgType msgType = static_cast<MsgType>(-1);
     ServerPhase serverPhase = static_cast<ServerPhase>(-1);
-    int i = 0;
-    int n = 0;
+    int queueIndex = 0;
     int q = 0;
+    int n = 0;
 
   private:
     void copy(const StateMessage& other);
@@ -100,14 +100,14 @@ class StateMessage : public ::omnetpp::cMessage
     virtual ServerPhase getServerPhase() const;
     virtual void setServerPhase(ServerPhase serverPhase);
 
-    virtual int getI() const;
-    virtual void setI(int i);
-
-    virtual int getN() const;
-    virtual void setN(int n);
+    virtual int getQueueIndex() const;
+    virtual void setQueueIndex(int queueIndex);
 
     virtual int getQ() const;
     virtual void setQ(int q);
+
+    virtual int getN() const;
+    virtual void setN(int n);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const StateMessage& obj) {obj.parsimPack(b);}

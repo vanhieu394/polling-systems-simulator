@@ -15,7 +15,7 @@ enum ServerPhase {
 message StateMessage {
     MsgType msgType;			// Msg's type
     ServerPhase serverPhase;	// Server phase
-    int i;						// Queue's index
-    int n;						// Number of packets in queue
+    int queueIndex;				// Queue's index
     int q;						// Queue's flag
+    int n;						// Number of packets in queue
 }

@@ -94,16 +94,8 @@ void DynamicServer::handleMessage(cMessage *msg) {
             stateMsg->setServerPhase(IDLING);
             send(stateMsg, "toMonitor");
 
-            for (int i = 0; i < numQueues; i++){
+            for (int i = 0; i < numQueues; i++)
                 q[i] = 1;
-
-//                // Update system state
-//                StateMessage *stateMsg = new StateMessage("Set q[i] = 1");
-//                stateMsg->setMsgType(SET_Q);
-//                stateMsg->setI(i);
-//                stateMsg->setQ(1);
-//                send(stateMsg, "toMonitor");
-            }
 
             scheduleAt(simTime() + par("restTime"), stopCycleEvent);
         }
@@ -129,7 +121,7 @@ void DynamicServer::handleMessage(cMessage *msg) {
             StateMessage *stateMsg = new StateMessage("CONNECTING phase");
             stateMsg->setMsgType(SET_SERVER_PHASE);
             stateMsg->setServerPhase(CONNECTING);
-            stateMsg->setI(gateInId);
+            stateMsg->setQueueIndex(gateInId);
             send(stateMsg, "toMonitor");
 
             // Switch to this queue
@@ -144,7 +136,7 @@ void DynamicServer::handleMessage(cMessage *msg) {
             // Update system state
             StateMessage *stateMsg = new StateMessage("Set q[i] = 1");
             stateMsg->setMsgType(SET_Q);
-            stateMsg->setI(gateInId);
+            stateMsg->setQueueIndex(gateInId);
             stateMsg->setQ(1);
             send(stateMsg, "toMonitor");
 
@@ -167,7 +159,7 @@ void DynamicServer::handleMessage(cMessage *msg) {
         // Update system state
         StateMessage *stateMsg = new StateMessage("Set q[i] = 0");
         stateMsg->setMsgType(SET_Q);
-        stateMsg->setI(msg->getKind());
+        stateMsg->setQueueIndex(msg->getKind());
         stateMsg->setQ(0);
         send(stateMsg, "toMonitor");
 
