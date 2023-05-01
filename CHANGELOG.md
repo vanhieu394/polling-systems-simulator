@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.5] - 2023-05-01
+
+### Added
+- Measured the probabilities of all states in the 2-queue system, instead of just certain states, with the trade-off of simulation speed.
+ 
+### Changed
+- Changed the order of variables to describe the 2-queue system states from (serverPhase, n1, n2, q1, q2) to (serverPhase, q1, q2, n1, n2).
+- Renamed variable "i" in state message and monitor to queueIndex to avoid confusion with the iterator when running for loop.
+- Rearranged code structure of the monitor module.
+- Optimized code.
+
 ## [v0.4] - 2023-04-25
  
 ### Added
