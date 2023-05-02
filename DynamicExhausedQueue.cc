@@ -65,11 +65,25 @@ void DynamicExhausedQueue::initialize() {
 }
 
 void DynamicExhausedQueue::finish() {
-    recordScalar("Mean waiting time in DynamicExhausedQueue", waitingTime.getMean());
-    recordScalar("Mean sojourn time in DynamicExhausedQueue", sojTime.getMean());
-    recordScalar("Mean cycle time in DynamicExhausedQueue", cycleTime.getMean());
-    recordScalar("Mean intervisit time in DynamicExhausedQueue", intervisitTime.getMean());
-    recordScalar("Number of cycle in DynamicExhausedQueue", cycleTime.getCount());
+    std::string waitingTimeNameString = "Mean waiting time in DynamicExhausedQueue[" + std::to_string(ownIndex) + "]";
+    const char *waitingTimeName = waitingTimeNameString.c_str();
+    recordScalar(waitingTimeName, waitingTime.getMean());
+
+    std::string sojTimeNameString = "Mean sojourn time in DynamicExhausedQueue[" + std::to_string(ownIndex) + "]";
+    const char *sojTimeName = sojTimeNameString.c_str();
+    recordScalar(sojTimeName, sojTime.getMean());
+
+    std::string cycleTimeNameString = "Mean cycle time in DynamicExhausedQueue[" + std::to_string(ownIndex) + "]";
+    const char *cycleTimeName = cycleTimeNameString.c_str();
+    recordScalar(cycleTimeName, cycleTime.getMean());
+
+    std::string intervisitTimeNameString = "Mean intervisit time in DynamicExhausedQueue[" + std::to_string(ownIndex) + "]";
+    const char *intervisitTimeName = intervisitTimeNameString.c_str();
+    recordScalar(intervisitTimeName, intervisitTime.getMean());
+
+    std::string numCycleNameString = "Number of cycle in DynamicExhausedQueue[" + std::to_string(ownIndex) + "]";
+    const char *numCycleName = numCycleNameString.c_str();
+    recordScalar(numCycleName, cycleTime.getCount());
 }
 
 void DynamicExhausedQueue::handleMessage(cMessage *msg) {
