@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6.1] - 2023-05-02
+
+### Changed
+- Commented out the code segment in the monitor module for mesuring probabilities of states with all variables: (serverPhase, q1, q2, n1, n2) to significantly increase simulation speed (up to 4x). Other than that, everything is the same with the v0.6 program version.
+
 ## [v0.6] - 2023-05-02
 
 ### Added
