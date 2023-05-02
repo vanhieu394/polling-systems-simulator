@@ -38,6 +38,7 @@ private:
     simtime_t startOfS2_1_1, startOfS2_0_1;
 
     // States with all variables: serverPhase, q1, q2, n1, n2
+    /*
     constexpr static int n1Max = 20;                    // Maximum of n1
     constexpr static int n2Max = 20;                    // Maximum of n2
 
@@ -76,6 +77,7 @@ private:
     cStdDev I_n1_n2[n1Max][n2Max];                      // State I, n1 = i, n2 = j
     bool isI_n1_n2[n1Max][n2Max];                       // Is system in state I, n1 = i, n2 = j
     simtime_t startOfI_n1_n2[n1Max][n2Max];             // Start of state I, n1 = i, n2 = j
+    */
 
     // Some specific states for testing
     cStdDev C1_0_1_0_0;                                 // State C1,0,1,0,0
@@ -125,6 +127,7 @@ void Monitor::initialize() {
     startOfS2_1_1 = startOfS2_0_1 = 0;
 
     // States with all variables: serverPhase, q1, q2, n1, n2
+    /*
     for (int i = 0; i < n1Max; i++)
         for (int j = 0; j < n2Max; j++) {
             isC1_1_1_n1_n2[i][j] = false;
@@ -157,6 +160,7 @@ void Monitor::initialize() {
             isI_n1_n2[i][j] = false;
             startOfI_n1_n2[i][j] = 0;
         }
+    */
 
     // Some specific states for testing
     isC1_0_1_0_0 = false;
@@ -184,6 +188,7 @@ void Monitor::finish() {
     recordScalar("Probability S2_0_1", S2_0_1.getSum() * 100 / simTime());
 
     // States with all variables: serverPhase, q1, q2, n1, n2
+    /*
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
                 std::string nameString = "Probability C1_1_1_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
@@ -246,6 +251,7 @@ void Monitor::finish() {
                 const char *name = nameString.c_str();
                 recordScalar(name, I_n1_n2[i][j].getSum() * 100 / simTime());
             }
+    */
 
     // Some specific states for testing
     recordScalar("Probability C1_0_1_0_0", C1_0_1_0_0.getSum() * 100 / simTime());
@@ -504,6 +510,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         //  States with all variables: serverPhase, q1, q2, n1, n2 --------------------------------
+        /*
         for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
                 // C1_1_1_n1_n2
@@ -700,6 +707,7 @@ void Monitor::handleMessage(cMessage *msg) {
 
 
             }
+        */
 
         // Some specific states for testing --------------------------------------------
         // C1_0_1_0_0
