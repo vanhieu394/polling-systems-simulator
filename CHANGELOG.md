@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6] - 2023-05-02
+
+### Added
+- Added queue index and values of n1, n2 to the scalar output in the queue and monitor module.
+
 ## [v0.5] - 2023-05-01
 
 ### Added
