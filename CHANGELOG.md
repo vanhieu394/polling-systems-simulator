@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.6.2] - 2023-05-03
+
+### Fixed
+- Fixed the order of system state variables in the monitor.cc when printed out to the screen, from (serverPhase, n1, n2, q1, q2) to (serverPhase, q1, q2, n1, n2).
+
+### Note
+- If you want to measure probability of all states, uncomment the corresponding code segment in the monitor.cc file.
+
 ## [v0.6.1] - 2023-05-02
 
 ### Changed
