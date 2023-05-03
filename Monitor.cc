@@ -273,10 +273,10 @@ void Monitor::handleMessage(cMessage *msg) {
 
         EV << serverPhase << "[" <<
                 queueIndex+1 << "], " <<
-                n[0] << ", " <<
-                n[1] << ", " <<
                 q[0] << ", " <<
-                q[1] << "\n";
+                q[1] << ", " <<
+                n[0] << ", " <<
+                n[1] << "\n";
 
         scheduleAt(simTime(), statsCollectionEvent);
     }
@@ -288,10 +288,10 @@ void Monitor::handleMessage(cMessage *msg) {
 
         EV << serverPhase << "[" <<
                 queueIndex+1 << "], " <<
-                n[0] << ", " <<
-                n[1] << ", " <<
                 q[0] << ", " <<
-                q[1] << "\n";
+                q[1] << ", " <<
+                n[0] << ", " <<
+                n[1] << "\n";
 
         scheduleAt(simTime(), statsCollectionEvent);
     }
@@ -303,10 +303,10 @@ void Monitor::handleMessage(cMessage *msg) {
 
         EV << serverPhase << "[" <<
                 queueIndex+1 << "], " <<
-                n[0] << ", " <<
-                n[1] << ", " <<
                 q[0] << ", " <<
-                q[1] << "\n";
+                q[1] << ", " <<
+                n[0] << ", " <<
+                n[1] << "\n";
 
         scheduleAt(simTime(), statsCollectionEvent);
     }
