@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.6.3] - 2023-05-05
+
+### Fixed
+- Spelling correction in all files: exhaused -> exhaustive
+
+### Note
+- If you want to measure probability of all states, uncomment the corresponding code segment in the monitor.cc file.
+
 ## [v0.6.2] - 2023-05-03
 
 ### Fixed
@@ -63,7 +71,7 @@ Compared to Tan's Polling_systems_v5.5.1:
 - Added the feature of measuring packet waiting time in the queue module.
  
 ### Changed
-- Only dynamic adaptive polling system with exhaused service is included in this version.
+- Only dynamic adaptive polling system with exhaustive service is included in this version.
 - Updated code to be compatible with OMNeT++ version 6.0.1.
 - The name of files, classes, variables, functions... are edited to follow the naming convention.
 - The code structure is rearranged.
