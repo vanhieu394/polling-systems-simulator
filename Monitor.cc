@@ -9,8 +9,8 @@ private:
     int numQueues;                          // The number of the queues
     int serverPhase;                        // Server phase
     int queueIndex;                         // Queue's index
-    std::vector<int> n;                     // Current number of packets in the queues
     std::vector<int> q;                     // Queue's flags
+    std::vector<int> n;                     // Current number of packets in the queues
 
     StateMessage *statsCollectionEvent;     // Start collecting statistics
 

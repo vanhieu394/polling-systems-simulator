@@ -1,5 +1,5 @@
-//Dynamic adaptive polling systems with exhaused service
-network DynamicExhausedPollingSystem
+//Dynamic adaptive polling systems with exhaustive service
+network DynamicExhaustivePollingSystem
 {
     parameters:
         int numQueues;
@@ -8,7 +8,7 @@ network DynamicExhausedPollingSystem
             @display("p=700,100,c,100");
         }
 
-        dynamicExhausedQueue[numQueues]: DynamicExhausedQueue {
+        dynamicExhaustiveQueue[numQueues]: DynamicExhaustiveQueue {
             @display("p=500,100,c,100");
             ownIndex = index;
         }
@@ -29,9 +29,9 @@ network DynamicExhausedPollingSystem
 
     connections:
         for i=0..numQueues-1 {
-            generator[i].out --> dynamicExhausedQueue[i].in;
-            dynamicExhausedQueue[i].server <--> dynamicServer.queue[i];
-            dynamicExhausedQueue[i].toMonitor --> monitor.fromQueue[i];
+            generator[i].out --> dynamicExhaustiveQueue[i].in;
+            dynamicExhaustiveQueue[i].server <--> dynamicServer.queue[i];
+            dynamicExhaustiveQueue[i].toMonitor --> monitor.fromQueue[i];
         }
         dynamicServer.toMonitor --> monitor.fromServer;
         dynamicServer.toSink --> sink.in;
