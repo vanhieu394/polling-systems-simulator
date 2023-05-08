@@ -1,0 +1,51 @@
+** Event #0   t=0   Elapsed: 2e-06s (0m 00s)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 16   present: 16   in FES: 4
+** Event #12437760   t=4795.212545792611   Elapsed: 2.00002s (0m 02s)
+     Speed:     ev/sec=6.21883e+06   simsec/sec=2397.59   ev/simsec=2593.79
+     Messages:  created: 3787442   present: 17   in FES: 3
+** Event #25139712   t=9722.757519347343   Elapsed: 4.00003s (0m 04s)
+     Speed:     ev/sec=6.35092e+06   simsec/sec=2463.75   ev/simsec=2577.74
+     Messages:  created: 7651647   present: 16   in FES: 3
+** Event #37754368   t=14602.276168303461   Elapsed: 6.00005s (0m 06s)
+     Speed:     ev/sec=6.30728e+06   simsec/sec=2439.74   ev/simsec=2585.23
+     Messages:  created: 11492114   present: 16   in FES: 3
+** Event #50448128   t=19553.54283518337   Elapsed: 8.00007s (0m 08s)
+     Speed:     ev/sec=6.34681e+06   simsec/sec=2475.6   ev/simsec=2563.74
+     Messages:  created: 15353057   present: 16   in FES: 3
+** Event #62829312   t=24397.307289372588   Elapsed: 10.0001s (0m 10s)
+     Speed:     ev/sec=6.19039e+06   simsec/sec=2421.8   ev/simsec=2556.11
+     Messages:  created: 19118647   present: 22   in FES: 4
+** Event #75279360   t=29232.574232472114   Elapsed: 12.0001s (0m 12s)
+     Speed:     ev/sec=6.22501e+06   simsec/sec=2417.63   ev/simsec=2574.84
+     Messages:  created: 22906050   present: 17   in FES: 3
+** Event #87670016   t=34030.329995641853   Elapsed: 14.0002s (0m 14s)
+     Speed:     ev/sec=6.19528e+06   simsec/sec=2398.86   ev/simsec=2582.59
+     Messages:  created: 26677282   present: 16   in FES: 3
+** Event #100278528   t=38918.176885278091   Elapsed: 16.0002s (0m 16s)
+     Speed:     ev/sec=6.30417e+06   simsec/sec=2443.89   ev/simsec=2579.56
+     Messages:  created: 30515138   present: 17   in FES: 3
+** Event #112775424   t=43771.300847251088   Elapsed: 18.0002s (0m 18s)
+     Speed:     ev/sec=6.24834e+06   simsec/sec=2426.52   ev/simsec=2575.02
+     Messages:  created: 34318862   present: 19   in FES: 3
+** Event #125146368   t=48564.253768149874   Elapsed: 20.0002s (0m 20s)
+     Speed:     ev/sec=6.18539e+06   simsec/sec=2396.45   ev/simsec=2581.07
+     Messages:  created: 38083993   present: 17   in FES: 3
+** Event #137343744   t=53325.447289170562   Elapsed: 22.0003s (0m 22s)
+     Speed:     ev/sec=6.09865e+06   simsec/sec=2380.58   ev/simsec=2561.83
+     Messages:  created: 41794220   present: 17   in FES: 3
+** Event #149725184   t=58121.167734816659   Elapsed: 24.0003s (0m 24s)
+     Speed:     ev/sec=6.19057e+06   simsec/sec=2397.8   ev/simsec=2581.77
+     Messages:  created: 45562269   present: 16   in FES: 3
+** Event #162263808   t=62985.465215910734   Elapsed: 26.0003s (0m 26s)
+     Speed:     ev/sec=6.26926e+06   simsec/sec=2432.13   ev/simsec=2577.68
+     Messages:  created: 49377101   present: 17   in FES: 3
+** Event #174623744   t=67773.420504433863   Elapsed: 28.0003s (0m 28s)
+     Speed:     ev/sec=6.17996e+06   simsec/sec=2393.98   ev/simsec=2581.46
+     Messages:  created: 53139702   present: 16   in FES: 3
+** Event #179288243   t=69565.911923857135   Elapsed: 28.7813s (0m 28s)
+     Speed:     ev/sec=5.97266e+06   simsec/sec=2295.2   ev/simsec=2602.24
+     Messages:  created: 54561400   present: 19   in FES: 4
+
+<!> Simulation stopped with endSimulation() -- in module (Sink) DynamicExhausedPollingSystem.sink (id=9), at t=69565.911923857135s, event #179288243
+undisposed object: (omnetpp::cMessage) DynamicExhausedPollingSystem.sink.packet -- check module destructor

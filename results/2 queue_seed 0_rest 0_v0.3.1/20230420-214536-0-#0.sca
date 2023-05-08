@@ -1,0 +1,62 @@
+version 3
+run DynamicExhausedPollingSystem-0-20230420-21:45:36-24700
+attr configname DynamicExhausedPollingSystem
+attr datetime 20230420-21:45:36
+attr datetimef 20230420-214536
+attr experiment DynamicExhausedPollingSystem
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network DynamicExhausedPollingSystem
+attr processid 24700
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+config description "Dynamic Adaptive Exhaused Polling System"
+config network DynamicExhausedPollingSystem
+config *.numQueues 2
+config *.generator[0].interArrivalTime exponential(1/30)
+config *.generator[1].interArrivalTime exponential(1/20)
+config *.dynamicExhausedQueue[*].serviceTime exponential(0.01)
+config *.dynamicServer.switchingTime "\"0.001 0.001 0.001 0.0006 0.000667 0.000667 0.000667 0.000667 0.000667 0.000667\""
+config *.dynamicServer.restTime 0
+config rng-class cMersenneTwister
+config output-scalar-file results/20230420-214536-0-#0.sca
+
+par DynamicExhausedPollingSystem.generator[0] typename "\"Generator\""
+par DynamicExhausedPollingSystem.generator[0] interArrivalTime exponential(0.0333333)
+par DynamicExhausedPollingSystem.generator[1] typename "\"Generator\""
+par DynamicExhausedPollingSystem.generator[1] interArrivalTime exponential(0.05)
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[0] typename "\"DynamicExhausedQueue\""
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[0] serviceTime exponential(0.01)
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[0] ownIndex 0
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean waiting time in DynamicExhausedQueue" 0.011497049147036
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean sojourn time in DynamicExhausedQueue" 0.021514198542314
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean cycle time in DynamicExhausedQueue" 0.0039873421209291
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean intervisit time in DynamicExhausedQueue" 0.0027882036524492
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Number of cycle in DynamicExhausedQueue" 15188837
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[1] typename "\"DynamicExhausedQueue\""
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[1] serviceTime exponential(0.01)
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[1] ownIndex 1
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean waiting time in DynamicExhausedQueue" 0.013430902276572
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean sojourn time in DynamicExhausedQueue" 0.023425365344251
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean cycle time in DynamicExhausedQueue" 0.0040220308539127
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean intervisit time in DynamicExhausedQueue" 0.0032178882752386
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Number of cycle in DynamicExhausedQueue" 15057841
+par DynamicExhausedPollingSystem.dynamicServer typename "\"DynamicServer\""
+par DynamicExhausedPollingSystem.dynamicServer switchingTime "\"0.001 0.001 0.001 0.0006 0.000667 0.000667 0.000667 0.000667 0.000667 0.000667\""
+par DynamicExhausedPollingSystem.dynamicServer restTime 0
+par DynamicExhausedPollingSystem.dynamicServer numQueues 2
+scalar DynamicExhausedPollingSystem.dynamicServer "Mean cycle time in the server" 0.0020677815935071
+scalar DynamicExhausedPollingSystem.dynamicServer "Number of cycle" 29288920
+par DynamicExhausedPollingSystem.sink typename "\"Sink\""
+scalar DynamicExhausedPollingSystem.sink "Mean sojourn time" 0.022278430733293
+scalar DynamicExhausedPollingSystem.sink "Number of packets" 3029772
+scalar DynamicExhausedPollingSystem.sink "Working time" 40.559
+par DynamicExhausedPollingSystem typename "\"DynamicExhausedPollingSystem\""
+par DynamicExhausedPollingSystem numQueues 2
+

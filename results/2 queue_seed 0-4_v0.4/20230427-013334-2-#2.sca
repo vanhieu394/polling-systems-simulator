@@ -1,0 +1,81 @@
+version 3
+run DynamicExhausedPollingSystem-2-20230427-01:33:34-28348
+attr configname DynamicExhausedPollingSystem
+attr datetime 20230427-01:33:34
+attr datetimef 20230427-013334
+attr experiment DynamicExhausedPollingSystem
+attr inifile omnetpp.ini
+attr iterationvars $0=2
+attr iterationvarsd 2
+attr iterationvarsf 2-
+attr measurement $0=2
+attr network DynamicExhausedPollingSystem
+attr processid 28348
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 2
+attr seedset 2
+config cmdenv-redirect-output true
+config description "Dynamic Adaptive Exhaused Polling System"
+config network DynamicExhausedPollingSystem
+config *.numQueues 2
+config *.generator[0].interArrivalTime exponential(1/30)
+config *.generator[1].interArrivalTime exponential(1/20)
+config *.dynamicExhausedQueue[*].serviceTime exponential(0.01)
+config *.dynamicServer.switchingTime "\"0.001 0.001 0.001 0.0006 0.000667 0.000667 0.000667 0.000667 0.000667 0.000667\""
+config *.dynamicServer.restTime exponential(0.002)
+config rng-class cMersenneTwister
+config seed-set 2
+config output-scalar-file results/20230427-013334-2-#2.sca
+
+par DynamicExhausedPollingSystem.generator[0] typename "\"Generator\""
+par DynamicExhausedPollingSystem.generator[0] interArrivalTime exponential(0.0333333)
+par DynamicExhausedPollingSystem.generator[1] typename "\"Generator\""
+par DynamicExhausedPollingSystem.generator[1] interArrivalTime exponential(0.05)
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[0] typename "\"DynamicExhausedQueue\""
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[0] serviceTime exponential(0.01)
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[0] ownIndex 0
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean waiting time in DynamicExhausedQueue" 0.011891889430613
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean sojourn time in DynamicExhausedQueue" 0.021894415737862
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean cycle time in DynamicExhausedQueue" 0.0052118436814203
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Mean intervisit time in DynamicExhausedQueue" 0.0036496463144472
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[0] "Number of cycle in DynamicExhausedQueue" 17487716
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[1] typename "\"DynamicExhausedQueue\""
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[1] serviceTime exponential(0.01)
+par DynamicExhausedPollingSystem.dynamicExhausedQueue[1] ownIndex 1
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean waiting time in DynamicExhausedQueue" 0.014177239917688
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean sojourn time in DynamicExhausedQueue" 0.02417548551535
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean cycle time in DynamicExhausedQueue" 0.0052704807651753
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Mean intervisit time in DynamicExhausedQueue" 0.0042165828571888
+scalar DynamicExhausedPollingSystem.dynamicExhausedQueue[1] "Number of cycle in DynamicExhausedQueue" 17293158
+par DynamicExhausedPollingSystem.dynamicServer typename "\"DynamicServer\""
+par DynamicExhausedPollingSystem.dynamicServer switchingTime "\"0.001 0.001 0.001 0.0006 0.000667 0.000667 0.000667 0.000667 0.000667 0.000667\""
+par DynamicExhausedPollingSystem.dynamicServer restTime exponential(0.002)
+par DynamicExhausedPollingSystem.dynamicServer numQueues 2
+scalar DynamicExhausedPollingSystem.dynamicServer "Mean cycle time in the server" 0.0027321681561696
+scalar DynamicExhausedPollingSystem.dynamicServer "Number of cycle" 33359308
+par DynamicExhausedPollingSystem.sink typename "\"Sink\""
+scalar DynamicExhausedPollingSystem.sink "Mean sojourn time" 0.02280745001995
+scalar DynamicExhausedPollingSystem.sink "Number of packets" 4554081
+scalar DynamicExhausedPollingSystem.sink "Working time" 81.197
+par DynamicExhausedPollingSystem.monitor typename "\"Monitor\""
+par DynamicExhausedPollingSystem.monitor numQueues 2
+scalar DynamicExhausedPollingSystem.monitor "Probability C1" 19.184153759614
+scalar DynamicExhausedPollingSystem.monitor "Probability C1_n1_n2_1_1" 7.4916523980547
+scalar DynamicExhausedPollingSystem.monitor "Probability C1_n1_n2_1_0" 11.692501361561
+scalar DynamicExhausedPollingSystem.monitor "Probability C2" 18.975571372928
+scalar DynamicExhausedPollingSystem.monitor "Probability C2_n1_n2_1_1" 12.402112489942
+scalar DynamicExhausedPollingSystem.monitor "Probability C2_n1_n2_0_1" 6.5734588829881
+scalar DynamicExhausedPollingSystem.monitor "Probability S1" 29.97399639353
+scalar DynamicExhausedPollingSystem.monitor "Probability S1_n1_n2_1_1" 15.77112224916
+scalar DynamicExhausedPollingSystem.monitor "Probability S1_n1_n2_1_0" 14.202874144369
+scalar DynamicExhausedPollingSystem.monitor "Probability S2" 19.996236017404
+scalar DynamicExhausedPollingSystem.monitor "Probability S2_n1_n2_1_1" 10.540269739142
+scalar DynamicExhausedPollingSystem.monitor "Probability S2_n1_n2_0_1" 9.4559662782632
+scalar DynamicExhausedPollingSystem.monitor "Probability I" 11.870032624425
+scalar DynamicExhausedPollingSystem.monitor "Probability C1_n1_n2_0_1" 0
+scalar DynamicExhausedPollingSystem.monitor "Probability C1_0_0_0_1" 0
+par DynamicExhausedPollingSystem typename "\"DynamicExhausedPollingSystem\""
+par DynamicExhausedPollingSystem numQueues 2
+

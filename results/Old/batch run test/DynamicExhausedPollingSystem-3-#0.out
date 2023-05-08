@@ -1,0 +1,31 @@
+** Event #0   t=0   Elapsed: 2e-06s (0m 00s)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 16   present: 16   in FES: 4
+** Event #12767488   t=4982.262419824778   Elapsed: 2.00001s (0m 02s)
+     Speed:     ev/sec=6.38371e+06   simsec/sec=2491.12   ev/simsec=2562.59
+     Messages:  created: 3884325   present: 16   in FES: 3
+** Event #25408256   t=9896.194433822968   Elapsed: 4.00002s (0m 04s)
+     Speed:     ev/sec=6.32038e+06   simsec/sec=2456.96   ev/simsec=2572.43
+     Messages:  created: 7730633   present: 16   in FES: 3
+** Event #38062080   t=14824.938989289348   Elapsed: 6.00006s (0m 06s)
+     Speed:     ev/sec=6.32678e+06   simsec/sec=2464.32   ev/simsec=2567.35
+     Messages:  created: 11580363   present: 16   in FES: 3
+** Event #50893312   t=19806.763350862518   Elapsed: 8.00008s (0m 08s)
+     Speed:     ev/sec=6.41556e+06   simsec/sec=2490.89   ev/simsec=2575.61
+     Messages:  created: 15485040   present: 17   in FES: 3
+** Event #63806464   t=24842.940498649156   Elapsed: 10.0001s (0m 10s)
+     Speed:     ev/sec=6.45647e+06   simsec/sec=2518.05   ev/simsec=2564.08
+     Messages:  created: 19412464   present: 18   in FES: 4
+** Event #76656640   t=29845.679532935557   Elapsed: 12.0001s (0m 12s)
+     Speed:     ev/sec=6.42502e+06   simsec/sec=2501.34   ev/simsec=2568.63
+     Messages:  created: 23321821   present: 16   in FES: 3
+** Event #89377536   t=34773.380621414835   Elapsed: 14.0001s (0m 14s)
+     Speed:     ev/sec=6.36044e+06   simsec/sec=2463.85   ev/simsec=2581.51
+     Messages:  created: 27194424   present: 18   in FES: 3
+** Event #93682667   t=36430.360502916538   Elapsed: 14.6667s (0m 14s)
+     Speed:     ev/sec=6.45837e+06   simsec/sec=2485.73   ev/simsec=2598.18
+     Messages:  created: 28505570   present: 18   in FES: 4
+
+<!> Simulation stopped with endSimulation() -- in module (Sink) DynamicExhausedPollingSystem.sink (id=9), at t=36430.360502916538s, event #93682667
+undisposed object: (omnetpp::cMessage) DynamicExhausedPollingSystem.sink.packet -- check module destructor
+undisposed object: (omnetpp::cMessage) DynamicExhausedPollingSystem.dynamicExhausedQueue.packet -- check module destructor

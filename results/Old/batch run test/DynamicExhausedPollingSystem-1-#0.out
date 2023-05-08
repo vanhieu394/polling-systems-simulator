@@ -1,0 +1,21 @@
+** Event #0   t=0   Elapsed: 3e-06s (0m 00s)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 16   present: 16   in FES: 4
+** Event #12441344   t=4797.947433950959   Elapsed: 2s (0m 02s)
+     Speed:     ev/sec=6.22067e+06   simsec/sec=2398.97   ev/simsec=2593.06
+     Messages:  created: 3788578   present: 16   in FES: 3
+** Event #24604928   t=9493.96232609392   Elapsed: 4.00001s (0m 04s)
+     Speed:     ev/sec=6.08179e+06   simsec/sec=2348.01   ev/simsec=2590.19
+     Messages:  created: 7491236   present: 17   in FES: 3
+** Event #36698112   t=14184.941421873012   Elapsed: 6.00003s (0m 06s)
+     Speed:     ev/sec=6.04651e+06   simsec/sec=2345.46   ev/simsec=2577.97
+     Messages:  created: 11171238   present: 16   in FES: 3
+** Event #48777984   t=18856.603777703685   Elapsed: 8.00007s (0m 08s)
+     Speed:     ev/sec=6.03982e+06   simsec/sec=2335.79   ev/simsec=2585.78
+     Messages:  created: 14849594   present: 20   in FES: 3
+** Event #59894229   t=23161.961914781334   Elapsed: 9.81932s (0m 09s)
+     Speed:     ev/sec=6.11034e+06   simsec/sec=2366.55   ev/simsec=2581.96
+     Messages:  created: 18233164   present: 19   in FES: 4
+
+<!> Simulation stopped with endSimulation() -- in module (Sink) DynamicExhausedPollingSystem.sink (id=9), at t=23161.961914781334s, event #59894229
+undisposed object: (omnetpp::cMessage) DynamicExhausedPollingSystem.sink.packet -- check module destructor
