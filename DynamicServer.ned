@@ -1,8 +1,8 @@
 simple DynamicServer
 {
     parameters:
-        string switchingTime;			// Switching time of the queues
-        volatile double restTime;		// Rest time if all queues are empty in the same cycle
+        string switchoverTime;			// Switching time of the queues
+        volatile double vacationTime;	// Rest time if all queues are empty in the same cycle
         int numQueues;					// The number of the queues
         @display("i=block/server");
     gates:

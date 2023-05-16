@@ -127,7 +127,7 @@ void Monitor::initialize() {
     startOfS2_1_1 = startOfS2_0_1 = 0;
 
     // States with all variables: serverPhase, q1, q2, n1, n2
-    /*
+/*
     for (int i = 0; i < n1Max; i++)
         for (int j = 0; j < n2Max; j++) {
             isC1_1_1_n1_n2[i][j] = false;
@@ -160,7 +160,7 @@ void Monitor::initialize() {
             isI_n1_n2[i][j] = false;
             startOfI_n1_n2[i][j] = 0;
         }
-    */
+*/
 
     // Some specific states for testing
     isC1_0_1_0_0 = false;
@@ -188,70 +188,70 @@ void Monitor::finish() {
     recordScalar("Probability S2_0_1", S2_0_1.getSum() * 100 / simTime());
 
     // States with all variables: serverPhase, q1, q2, n1, n2
-    /*
+/*
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability C1_1_1_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability C1_1_1_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, C1_1_1_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability C1_1_0_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability C1_1_0_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, C1_1_0_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability C2_1_1_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability C2_1_1_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, C2_1_1_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability C2_0_1_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability C2_0_1_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, C2_0_1_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability S1_1_1_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability S1_1_1_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, S1_1_1_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability S1_1_0_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability S1_1_0_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, S1_1_0_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability S2_1_1_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability S2_1_1_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, S2_1_1_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability S2_0_1_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability S2_0_1_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, S2_0_1_n1_n2[i][j].getSum() * 100 / simTime());
             }
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability I_n1_n2[" + std::to_string(i) + "][" + std::to_string(j) + "]";
+                std::string nameString = "Probability I_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
                 recordScalar(name, I_n1_n2[i][j].getSum() * 100 / simTime());
             }
-    */
+*/
 
     // Some specific states for testing
     recordScalar("Probability C1_0_1_0_0", C1_0_1_0_0.getSum() * 100 / simTime());
@@ -510,7 +510,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         //  States with all variables: serverPhase, q1, q2, n1, n2 --------------------------------
-        /*
+/*
         for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
                 // C1_1_1_n1_n2
@@ -707,7 +707,7 @@ void Monitor::handleMessage(cMessage *msg) {
 
 
             }
-        */
+*/
 
         // Some specific states for testing --------------------------------------------
         // C1_0_1_0_0

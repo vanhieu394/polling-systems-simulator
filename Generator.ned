@@ -1,7 +1,7 @@
 simple Generator
 {
     parameters:
-        volatile double interArrivalTime;
+        volatile double interarrivalTime;
         @display("i=block/source");
      gates:
          output out;            

@@ -28,7 +28,7 @@ Generator::~Generator(){
 void Generator::initialize(){
     // Create and schedule the send-message-event
     sendMsgEvent = new cMessage("Generating a new packet");
-    scheduleAt(simTime() + par("interArrivalTime"), sendMsgEvent);
+    scheduleAt(simTime() + par("interarrivalTime"), sendMsgEvent);
 }
 
 void Generator::handleMessage(cMessage *msg){
@@ -37,7 +37,7 @@ void Generator::handleMessage(cMessage *msg){
     send(pkt, "out");
 
     // Schedule the new packet generating
-    scheduleAt(simTime() + par("interArrivalTime"), sendMsgEvent);
+    scheduleAt(simTime() + par("interarrivalTime"), sendMsgEvent);
 }
 
 void Generator::finish(){}

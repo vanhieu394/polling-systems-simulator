@@ -14,13 +14,13 @@ private:
     int sum;                                   // Sum of all q[i] values
 
     std::vector<int> q;                        // Will poll i-queue if q[i] = 1 and skip i-queue if q[i] = 0
-    std::vector<double> arrayDouble;           // Vector of switchingTime
+    std::vector<double> arrayDouble;           // Vector of switchoverTime
 
     simtime_t startOfCycle;                    // The start of cycle moment
     simtime_t currCycleTime;                   // The duration of the current cycle
 
     cMessage *startCycleEvent;                 // Start a new cycle
-    cMessage *serviceEvent;                    // Start servicing
+    cMessage *checkQueueFlagEvent;             // Check queue's flag
     cMessage *switchToQueueEvent;              // Server switches to the queue
     cMessage *stopCycleEvent;                  // End of cycle
 
@@ -42,13 +42,13 @@ Define_Module(DynamicServer);
 
 DynamicServer::DynamicServer() {
     startCycleEvent = nullptr;
-    serviceEvent = nullptr;
+    checkQueueFlagEvent = nullptr;
     switchToQueueEvent = nullptr;
     stopCycleEvent = nullptr;
 }
 DynamicServer::~DynamicServer(){
     cancelAndDelete(startCycleEvent);
-    cancelAndDelete(serviceEvent);
+    cancelAndDelete(checkQueueFlagEvent);
     cancelAndDelete(switchToQueueEvent);
     cancelAndDelete(stopCycleEvent);
 }
@@ -59,16 +59,16 @@ void DynamicServer::initialize() {
 
     for (int i = 0; i < numQueues; i++)
         q.push_back(1);
-    const char* arrayString = par("switchingTime").stringValue();
+    const char* arrayString = par("switchoverTime").stringValue();
     arrayDouble = cStringTokenizer(arrayString).asDoubleVector();
 
     startOfCycle = 0;
     currCycleTime = 0;
 
-    startCycleEvent = new cMessage("Starting a new cycle");
-    serviceEvent = new cMessage("Starting service");
-    switchToQueueEvent = new cMessage("Switching to the queue");
-    stopCycleEvent = new cMessage("End of Cycle");
+    startCycleEvent = new cMessage("New cycle is started");
+    checkQueueFlagEvent = new cMessage("Checking queue's flag");
+    switchToQueueEvent = new cMessage("Switched to the queue");
+    stopCycleEvent = new cMessage("End of cycle");
 
     scheduleAt(simTime(), startCycleEvent);
 }
@@ -97,10 +97,10 @@ void DynamicServer::handleMessage(cMessage *msg) {
             for (int i = 0; i < numQueues; i++)
                 q[i] = 1;
 
-            scheduleAt(simTime() + par("restTime"), stopCycleEvent);
+            scheduleAt(simTime() + par("vacationTime"), stopCycleEvent);
         }
         else
-            scheduleAt(simTime(), serviceEvent);
+            scheduleAt(simTime(), checkQueueFlagEvent);
     }
 
     // End of cycle
@@ -114,8 +114,8 @@ void DynamicServer::handleMessage(cMessage *msg) {
         scheduleAt(simTime(), startCycleEvent);
     }
 
-    // Start servicing
-    else if (msg == serviceEvent) {
+    // Checking queue's flag
+    else if (msg == checkQueueFlagEvent) {
         if (q[gateInId] == 1) {
             // Update system state
             StateMessage *stateMsg = new StateMessage("CONNECTING phase");
@@ -125,8 +125,8 @@ void DynamicServer::handleMessage(cMessage *msg) {
             send(stateMsg, "toMonitor");
 
             // Switch to this queue
-            double switchingTime = exponential(arrayDouble[gateInId]);
-            scheduleAt(simTime() + switchingTime, switchToQueueEvent);
+            double switchoverTime = exponential(arrayDouble[gateInId]);
+            scheduleAt(simTime() + switchoverTime, switchToQueueEvent);
         }
 
         // If q[i] = 0, reset it to 1, then skip this queue
@@ -144,7 +144,7 @@ void DynamicServer::handleMessage(cMessage *msg) {
             if(gateInId == 0)
                 scheduleAt(simTime(), stopCycleEvent);
             else
-                scheduleAt(simTime(), serviceEvent);
+                scheduleAt(simTime(), checkQueueFlagEvent);
         }
     }
 
@@ -169,7 +169,7 @@ void DynamicServer::handleMessage(cMessage *msg) {
         if(gateInId == 0)
             scheduleAt(simTime(), stopCycleEvent);
         else
-            scheduleAt(simTime(), serviceEvent);
+            scheduleAt(simTime(), checkQueueFlagEvent);
     }
 
     // If the queue is fully serviced, switch to another queue
@@ -180,7 +180,7 @@ void DynamicServer::handleMessage(cMessage *msg) {
         if(gateInId == 0)
             scheduleAt(simTime(), stopCycleEvent);
         else
-            scheduleAt(simTime(), serviceEvent);
+            scheduleAt(simTime(), checkQueueFlagEvent);
     }
 
     // Send out the serviced packets to the sink immediately

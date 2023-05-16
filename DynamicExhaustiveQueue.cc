@@ -60,7 +60,7 @@ void DynamicExhaustiveQueue::initialize() {
     leavingMoment = 0;
 
     takePacketEvent = new cMessage("Taking packet out of the buffer");
-    packetServiceEvent = new cMessage("Servicing packet");
+    packetServiceEvent = new cMessage("A packet is serviced");
     checkQueueEvent = new cMessage("Checking queue");
 }
 
