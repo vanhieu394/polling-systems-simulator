@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.6.4] - 2023-05-17
+
+### Fixed
+- Corrected some spelling mistakes: switchingTime -> switchoverTime, restTime -> vacationTime, interArrivalTime -> interarrivalTime
+- In the server module: rename serviceEvent to checkQueueFlagEvent.
+- In the monitor module: rename C1_1_1_n1_n2[i][j] to C1_1_1_i_j in the output file for convenience in looking up results.
+- Minor fixes in some events.
+
+### Note
+- If you want to measure probability of all states, uncomment the corresponding code segment in the monitor.cc file.
+
 ## [v0.6.3] - 2023-05-05
 
 ### Fixed
