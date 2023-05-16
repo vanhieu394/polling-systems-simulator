@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<analysis version="2">
+    <inputs>
+        <input pattern="/polling-systems-simulator/results/2 queue_seed 0_rest 0.002_lambda5-40_v0.6.3/20230514-194514-5-*.vec"/>
+        <input pattern="/polling-systems-simulator/results/2 queue_seed 0_rest 0.002_lambda5-40_v0.6.3/20230514-194514-5-*.sca"/>
+    </inputs>
+    <charts/>
+</analysis>
