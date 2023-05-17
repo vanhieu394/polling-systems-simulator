@@ -9,7 +9,7 @@ using namespace omnetpp;
 class DynamicExhaustiveQueue : public cSimpleModule {
 private:
     cQueue buffer;                      // Buffer to save all packets
-    int n;                              // Buffer's current length
+    int queueLen;                       // Current queue length
     int ownIndex;                       // Queue's index
     long int cycleNumber;               // Current cycle number
 
@@ -17,8 +17,7 @@ private:
     simtime_t leavingMoment;            // The moment when server completes serving this queue and leaves it
 
     cMessage *takePacketEvent;          // Take packet out of the buffer
-    cMessage *packetServiceEvent;       // Take the packet out of the buffer and service it
-    cMessage *checkQueueEvent;          // After serving the last packet, check if queue is empty
+    cMessage *packetServDoneEvent;       // Take the packet out of the buffer and service it
     cMessage *pkt;                      // Current servicing packet
 
     cStdDev waitingTime;                // The waiting time sequence of all packets
@@ -39,20 +38,18 @@ Define_Module(DynamicExhaustiveQueue);
 
 DynamicExhaustiveQueue::DynamicExhaustiveQueue() {
     takePacketEvent = nullptr;
-    packetServiceEvent = nullptr;
-    checkQueueEvent = nullptr;
+    packetServDoneEvent = nullptr;
     pkt = nullptr;
 }
 
 DynamicExhaustiveQueue::~DynamicExhaustiveQueue() {
     cancelAndDelete(takePacketEvent);
-    cancelAndDelete(packetServiceEvent);
-    cancelAndDelete(checkQueueEvent);
+    cancelAndDelete(packetServDoneEvent);
 }
 
 void DynamicExhaustiveQueue::initialize() {
     buffer.setName("buffer");
-    n = 0;
+    queueLen = 0;
     ownIndex = par("ownIndex");
     cycleNumber = 0;
 
@@ -60,8 +57,7 @@ void DynamicExhaustiveQueue::initialize() {
     leavingMoment = 0;
 
     takePacketEvent = new cMessage("Taking packet out of the buffer");
-    packetServiceEvent = new cMessage("A packet is serviced");
-    checkQueueEvent = new cMessage("Checking queue");
+    packetServDoneEvent = new cMessage("A packet is serviced");
 }
 
 void DynamicExhaustiveQueue::finish() {
@@ -107,17 +103,17 @@ void DynamicExhaustiveQueue::handleMessage(cMessage *msg) {
 //        EV << "Current cycle in Q[" << ownIndex << "] = "
 //                << cycleNumber << "\n";
 
-        n = buffer.getLength();
-        if (n == 0) {
+        queueLen = buffer.getLength();
+        if (queueLen == 0) {
             // Send "Queue is empty" msg to the server
             send(new cMessage("Queue is empty", ownIndex), "server$o");
             leavingMoment = simTime();
         }
         else {
             // Update system state
-            StateMessage *stateMsg = new StateMessage("SERVICING phase");
+            StateMessage *stateMsg = new StateMessage("SERVICE phase");
             stateMsg->setMsgType(SET_SERVER_PHASE);
-            stateMsg->setServerPhase(SERVICING);
+            stateMsg->setServerPhase(SERVICE);
             stateMsg->setQueueIndex(ownIndex);
             send(stateMsg, "toMonitor");
 
@@ -133,55 +129,45 @@ void DynamicExhaustiveQueue::handleMessage(cMessage *msg) {
         // Collect the the statistics
         waitingTime.collect(simTime() - pkt->getCreationTime());
 
-        scheduleAt(simTime() + par("serviceTime"), packetServiceEvent);
+        scheduleAt(simTime() + par("serviceTime"), packetServDoneEvent);
     }
 
-    // Service the packet
-    else if (msg == packetServiceEvent) {
+    // Finish servicing the packet
+    else if (msg == packetServDoneEvent) {
         // Collect the the statistics
         sojTime.collect(simTime() - pkt->getCreationTime());
 
         // Send out the packet to the server
         send(pkt, "server$o");
-        n--;
+        queueLen--;
 
         // Send msg to the monitor to update system state
         StateMessage *stateMsg = new StateMessage("Set n[i]");
         stateMsg->setMsgType(SET_N);
         stateMsg->setQueueIndex(ownIndex);
-        stateMsg->setN(buffer.getLength());
+        stateMsg->setN(queueLen);
         send(stateMsg, "toMonitor");
 
-        if (n == 0) {
-            scheduleAt(simTime(), checkQueueEvent);
-        }
-        else {
-            scheduleAt(simTime(), takePacketEvent);
-        }
-
-    }
-
-    // Check the queue if it have packets
-    else if (msg == checkQueueEvent) {
-        n = buffer.getLength();
-        if (n == 0) {
+        if (queueLen == 0) {
             send(new cMessage("Queue is serviced", ownIndex), "server$o");
             leavingMoment = simTime();
         }
         else {
             scheduleAt(simTime(), takePacketEvent);
         }
+
     }
 
     // Insert packets from the generator to the buffer
     else {
         buffer.insert(msg);
+        queueLen++;
 
         // Send msg to the monitor to update system state
         StateMessage *stateMsg = new StateMessage("Set n[i]");
         stateMsg->setMsgType(SET_N);
         stateMsg->setQueueIndex(ownIndex);
-        stateMsg->setN(buffer.getLength());
+        stateMsg->setN(queueLen);
         send(stateMsg, "toMonitor");
     }
 }

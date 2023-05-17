@@ -89,9 +89,9 @@ void DynamicServer::handleMessage(cMessage *msg) {
         // Check if all queues are empty
         if (sum == 0) {
             // Jump to idling phase and reset all q[i] to 1
-            StateMessage *stateMsg = new StateMessage("IDLING phase");
+            StateMessage *stateMsg = new StateMessage("VACATION phase");
             stateMsg->setMsgType(SET_SERVER_PHASE);
-            stateMsg->setServerPhase(IDLING);
+            stateMsg->setServerPhase(VACATION);
             send(stateMsg, "toMonitor");
 
             for (int i = 0; i < numQueues; i++)
@@ -118,9 +118,9 @@ void DynamicServer::handleMessage(cMessage *msg) {
     else if (msg == checkQueueFlagEvent) {
         if (q[gateInId] == 1) {
             // Update system state
-            StateMessage *stateMsg = new StateMessage("CONNECTING phase");
+            StateMessage *stateMsg = new StateMessage("CONNECTION phase");
             stateMsg->setMsgType(SET_SERVER_PHASE);
-            stateMsg->setServerPhase(CONNECTING);
+            stateMsg->setServerPhase(CONNECTION);
             stateMsg->setQueueIndex(gateInId);
             send(stateMsg, "toMonitor");
 

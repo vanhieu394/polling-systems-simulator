@@ -1,5 +1,21 @@
 # Changelog
 
+## [v0.7] - 2023-05-17
+
+### Added
+- Support gated service. 
+
+### Fixed
+- Fixed bug in queues module that sends out bufferLen instead of queueLen
+
+### Changed
+- Renamed server phases to match the theory: CONNECTING -> CONNECTION, SERVICING -> SERVICE, IDLING -> VACATION
+- In monitor: I -> V
+- In queues: n -> queueLen, packetServiceEvent -> packetServDoneEvent
+
+### Note
+- If you want to measure probability of all states, uncomment the corresponding code segment in the monitor.cc file.
+
 ## [v0.6.4] - 2023-05-17
 
 ### Fixed

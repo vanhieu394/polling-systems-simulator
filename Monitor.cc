@@ -16,9 +16,9 @@ private:
 
     // Variables to collect system states
     // States with only serverPhase variable
-    cStdDev C1, C2, S1, S2, I;
-    bool isC1, isC2, isS1, isS2, isI;       // Is system in these states?
-    simtime_t startOfC1, startOfC2, startOfS1, startOfS2, startOfI;
+    cStdDev C1, C2, S1, S2, V;
+    bool isC1, isC2, isS1, isS2, isV;       // Is system in these states?
+    simtime_t startOfC1, startOfC2, startOfS1, startOfS2, startOfV;
 
     // States with serverPhase, q1, q2
     cStdDev C1_1_1, C1_1_0;
@@ -38,7 +38,7 @@ private:
     simtime_t startOfS2_1_1, startOfS2_0_1;
 
     // States with all variables: serverPhase, q1, q2, n1, n2
-    /*
+
     constexpr static int n1Max = 20;                    // Maximum of n1
     constexpr static int n2Max = 20;                    // Maximum of n2
 
@@ -74,10 +74,10 @@ private:
     bool isS2_0_1_n1_n2[n1Max][n2Max];                  // Is system in state S2, q1 = 0, q2 = 1, n1 = i, n2 = j
     simtime_t startOfS2_0_1_n1_n2[n1Max][n2Max];        // Start of state S2, q1 = 0, q2 = 1, n1 = i, n2 = j
 
-    cStdDev I_n1_n2[n1Max][n2Max];                      // State I, n1 = i, n2 = j
-    bool isI_n1_n2[n1Max][n2Max];                       // Is system in state I, n1 = i, n2 = j
-    simtime_t startOfI_n1_n2[n1Max][n2Max];             // Start of state I, n1 = i, n2 = j
-    */
+    cStdDev V_n1_n2[n1Max][n2Max];                      // State V, n1 = i, n2 = j
+    bool isV_n1_n2[n1Max][n2Max];                       // Is system in state V, n1 = i, n2 = j
+    simtime_t startOfV_n1_n2[n1Max][n2Max];             // Start of state V, n1 = i, n2 = j
+
 
     // Some specific states for testing
     cStdDev C1_0_1_0_0;                                 // State C1,0,1,0,0
@@ -105,7 +105,7 @@ Monitor::~Monitor() {
 
 void Monitor::initialize() {
     numQueues = par("numQueues");
-    serverPhase = IDLING;
+    serverPhase = VACATION;
     queueIndex = 0;
     for (int i = 0; i < numQueues; i++)
         n.push_back(0);
@@ -113,8 +113,8 @@ void Monitor::initialize() {
         q.push_back(1);
 
     // States with only serverPhase variable
-    isC1 = isC2 = isS1 = isS2 = isI = false;
-    startOfC1 = startOfC2 = startOfS1 = startOfS2 = startOfI = 0;
+    isC1 = isC2 = isS1 = isS2 = isV = false;
+    startOfC1 = startOfC2 = startOfS1 = startOfS2 = startOfV = 0;
 
     // States with serverPhase, q1, q2
     isC1_1_1 = isC1_1_0 = false;
@@ -127,7 +127,7 @@ void Monitor::initialize() {
     startOfS2_1_1 = startOfS2_0_1 = 0;
 
     // States with all variables: serverPhase, q1, q2, n1, n2
-/*
+
     for (int i = 0; i < n1Max; i++)
         for (int j = 0; j < n2Max; j++) {
             isC1_1_1_n1_n2[i][j] = false;
@@ -157,10 +157,10 @@ void Monitor::initialize() {
             isS2_0_1_n1_n2[i][j] = false;
             startOfS2_0_1_n1_n2[i][j] = 0;
 
-            isI_n1_n2[i][j] = false;
-            startOfI_n1_n2[i][j] = 0;
+            isV_n1_n2[i][j] = false;
+            startOfV_n1_n2[i][j] = 0;
         }
-*/
+
 
     // Some specific states for testing
     isC1_0_1_0_0 = false;
@@ -175,7 +175,7 @@ void Monitor::finish() {
     recordScalar("Probability C2", C2.getSum() * 100 / simTime());
     recordScalar("Probability S1", S1.getSum() * 100 / simTime());
     recordScalar("Probability S2", S2.getSum() * 100 / simTime());
-    recordScalar("Probability I", I.getSum() * 100 / simTime());
+    recordScalar("Probability V", V.getSum() * 100 / simTime());
 
     // States with serverPhase, q1, q2
     recordScalar("Probability C1_1_1", C1_1_1.getSum() * 100 / simTime());
@@ -188,7 +188,7 @@ void Monitor::finish() {
     recordScalar("Probability S2_0_1", S2_0_1.getSum() * 100 / simTime());
 
     // States with all variables: serverPhase, q1, q2, n1, n2
-/*
+
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
                 std::string nameString = "Probability C1_1_1_" + std::to_string(i) + "_" + std::to_string(j);
@@ -247,11 +247,11 @@ void Monitor::finish() {
 
     for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
-                std::string nameString = "Probability I_" + std::to_string(i) + "_" + std::to_string(j);
+                std::string nameString = "Probability V_" + std::to_string(i) + "_" + std::to_string(j);
                 const char *name = nameString.c_str();
-                recordScalar(name, I_n1_n2[i][j].getSum() * 100 / simTime());
+                recordScalar(name, V_n1_n2[i][j].getSum() * 100 / simTime());
             }
-*/
+
 
     // Some specific states for testing
     recordScalar("Probability C1_0_1_0_0", C1_0_1_0_0.getSum() * 100 / simTime());
@@ -264,7 +264,7 @@ void Monitor::handleMessage(cMessage *msg) {
     // msgType = SET_SERVER_PHASE
     if (stateMsg->getMsgType() == SET_SERVER_PHASE) {
         serverPhase = stateMsg->getServerPhase();
-        if (serverPhase == IDLING)
+        if (serverPhase == VACATION)
             for (int i = 0; i < numQueues; i++)
                 q[i] = 1;
         else
@@ -315,58 +315,58 @@ void Monitor::handleMessage(cMessage *msg) {
     else if (stateMsg == statsCollectionEvent) {
         // States with only serverPhase variable ------------------------------------------
         // C1
-        if (serverPhase == CONNECTING && queueIndex == 0 && isC1 == false) {
+        if (serverPhase == CONNECTION && queueIndex == 0 && isC1 == false) {
             startOfC1 = simTime();
             isC1 = true;
         }
-        else if (!(serverPhase == CONNECTING && queueIndex == 0) && isC1 == true) {
+        else if (!(serverPhase == CONNECTION && queueIndex == 0) && isC1 == true) {
             C1.collect(simTime() - startOfC1);
             isC1 = false;
         }
 
         // C2
-        if (serverPhase == CONNECTING && queueIndex == 1 && isC2 == false) {
+        if (serverPhase == CONNECTION && queueIndex == 1 && isC2 == false) {
             startOfC2 = simTime();
             isC2 = true;
         }
-        else if (!(serverPhase == CONNECTING && queueIndex == 1) && isC2 == true) {
+        else if (!(serverPhase == CONNECTION && queueIndex == 1) && isC2 == true) {
             C2.collect(simTime() - startOfC2);
             isC2 = false;
         }
 
         // S1
-        if (serverPhase == SERVICING && queueIndex == 0 && isS1 == false) {
+        if (serverPhase == SERVICE && queueIndex == 0 && isS1 == false) {
             startOfS1 = simTime();
             isS1 = true;
         }
-        else if (!(serverPhase == SERVICING && queueIndex == 0) && isS1 == true) {
+        else if (!(serverPhase == SERVICE && queueIndex == 0) && isS1 == true) {
             S1.collect(simTime() - startOfS1);
             isS1 = false;
         }
 
         // S2
-        if (serverPhase == SERVICING && queueIndex == 1 && isS2 == false) {
+        if (serverPhase == SERVICE && queueIndex == 1 && isS2 == false) {
             startOfS2 = simTime();
             isS2 = true;
         }
-        else if (!(serverPhase == SERVICING && queueIndex == 1) && isS2 == true) {
+        else if (!(serverPhase == SERVICE && queueIndex == 1) && isS2 == true) {
             S2.collect(simTime() - startOfS2);
             isS2 = false;
         }
 
-        // I
-        if (serverPhase == IDLING && isI == false) {
-            startOfI = simTime();
-            isI = true;
+        // V
+        if (serverPhase == VACATION && isV == false) {
+            startOfV = simTime();
+            isV = true;
         }
-        else if (serverPhase != IDLING && isI == true) {
-            I.collect(simTime() - startOfI);
-            isI = false;
+        else if (serverPhase != VACATION && isV == true) {
+            V.collect(simTime() - startOfV);
+            isV = false;
         }
 
         // States with serverPhase, q1, q2 -----------------------------------------------
         // C1_1_1
-        if (serverPhase == CONNECTING &&
+        if (serverPhase == CONNECTION &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 1 &&
@@ -374,7 +374,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfC1_1_1 = simTime();
             isC1_1_1 = true;
         }
-        else if (!(serverPhase == CONNECTING &&
+        else if (!(serverPhase == CONNECTION &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 1) &&
@@ -384,7 +384,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         // C1_1_0
-        if (serverPhase == CONNECTING &&
+        if (serverPhase == CONNECTION &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 0 &&
@@ -392,7 +392,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfC1_1_0 = simTime();
             isC1_1_0 = true;
         }
-        else if (!(serverPhase == CONNECTING &&
+        else if (!(serverPhase == CONNECTION &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 0) &&
@@ -402,7 +402,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         // C2_1_1
-        if (serverPhase == CONNECTING &&
+        if (serverPhase == CONNECTION &&
                 queueIndex == 1 &&
                 q[0] == 1 &&
                 q[1] == 1 &&
@@ -410,7 +410,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfC2_1_1 = simTime();
             isC2_1_1 = true;
         }
-        else if (!(serverPhase == CONNECTING &&
+        else if (!(serverPhase == CONNECTION &&
                 queueIndex == 1 &&
                 q[0] == 1 &&
                 q[1] == 1) &&
@@ -420,7 +420,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         // C2_0_1
-        if (serverPhase == CONNECTING &&
+        if (serverPhase == CONNECTION &&
                 queueIndex == 1 &&
                 q[0] == 0 &&
                 q[1] == 1 &&
@@ -428,7 +428,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfC2_0_1 = simTime();
             isC2_0_1 = true;
         }
-        else if (!(serverPhase == CONNECTING &&
+        else if (!(serverPhase == CONNECTION &&
                 queueIndex == 1 &&
                 q[0] == 0 &&
                 q[1] == 1) &&
@@ -438,7 +438,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         // S1_1_1
-        if (serverPhase == SERVICING &&
+        if (serverPhase == SERVICE &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 1 &&
@@ -446,7 +446,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfS1_1_1 = simTime();
             isS1_1_1 = true;
         }
-        else if (!(serverPhase == SERVICING &&
+        else if (!(serverPhase == SERVICE &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 1) &&
@@ -456,7 +456,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         // S1_1_0
-        if (serverPhase == SERVICING &&
+        if (serverPhase == SERVICE &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 0 &&
@@ -464,7 +464,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfS1_1_0 = simTime();
             isS1_1_0 = true;
         }
-        else if (!(serverPhase == SERVICING &&
+        else if (!(serverPhase == SERVICE &&
                 queueIndex == 0 &&
                 q[0] == 1 &&
                 q[1] == 0) &&
@@ -474,7 +474,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         // S2_1_1
-        if (serverPhase == SERVICING &&
+        if (serverPhase == SERVICE &&
                 queueIndex == 1 &&
                 q[0] == 1 &&
                 q[1] == 1 &&
@@ -482,7 +482,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfS2_1_1 = simTime();
             isS2_1_1 = true;
         }
-        else if (!(serverPhase == SERVICING &&
+        else if (!(serverPhase == SERVICE &&
                 queueIndex == 1 &&
                 q[0] == 1 &&
                 q[1] == 1) &&
@@ -492,7 +492,7 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         // S2_0_1
-        if (serverPhase == SERVICING &&
+        if (serverPhase == SERVICE &&
                 queueIndex == 1 &&
                 q[0] == 0 &&
                 q[1] == 1 &&
@@ -500,7 +500,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfS2_0_1 = simTime();
             isS2_0_1 = true;
         }
-        else if (!(serverPhase == SERVICING &&
+        else if (!(serverPhase == SERVICE &&
                 queueIndex == 1 &&
                 q[0] == 0 &&
                 q[1] == 1) &&
@@ -510,11 +510,11 @@ void Monitor::handleMessage(cMessage *msg) {
         }
 
         //  States with all variables: serverPhase, q1, q2, n1, n2 --------------------------------
-/*
+
         for (int i = 0; i < n1Max; i++)
             for (int j = 0; j < n2Max; j++) {
                 // C1_1_1_n1_n2
-                if (serverPhase == CONNECTING &&
+                if (serverPhase == CONNECTION &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -524,7 +524,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfC1_1_1_n1_n2[i][j] = simTime();
                     isC1_1_1_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == CONNECTING &&
+                else if (!(serverPhase == CONNECTION &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -536,7 +536,7 @@ void Monitor::handleMessage(cMessage *msg) {
                 }
 
                 // C1_1_0_n1_n2
-                if (serverPhase == CONNECTING &&
+                if (serverPhase == CONNECTION &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 0 &&
@@ -546,7 +546,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfC1_1_0_n1_n2[i][j] = simTime();
                     isC1_1_0_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == CONNECTING &&
+                else if (!(serverPhase == CONNECTION &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 0 &&
@@ -558,7 +558,7 @@ void Monitor::handleMessage(cMessage *msg) {
                 }
 
                 // C2_1_1_n1_n2
-                if (serverPhase == CONNECTING &&
+                if (serverPhase == CONNECTION &&
                         queueIndex == 1 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -568,7 +568,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfC2_1_1_n1_n2[i][j] = simTime();
                     isC2_1_1_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == CONNECTING &&
+                else if (!(serverPhase == CONNECTION &&
                         queueIndex == 1 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -580,7 +580,7 @@ void Monitor::handleMessage(cMessage *msg) {
                 }
 
                 // C2_0_1_n1_n2
-                if (serverPhase == CONNECTING &&
+                if (serverPhase == CONNECTION &&
                         queueIndex == 1 &&
                         q[0] == 0 &&
                         q[1] == 1 &&
@@ -590,7 +590,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfC2_0_1_n1_n2[i][j] = simTime();
                     isC2_0_1_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == CONNECTING &&
+                else if (!(serverPhase == CONNECTION &&
                         queueIndex == 1 &&
                         q[0] == 0 &&
                         q[1] == 1 &&
@@ -602,7 +602,7 @@ void Monitor::handleMessage(cMessage *msg) {
                 }
 
                 // S1_1_1_n1_n2
-                if (serverPhase == SERVICING &&
+                if (serverPhase == SERVICE &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -612,7 +612,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfS1_1_1_n1_n2[i][j] = simTime();
                     isS1_1_1_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == SERVICING &&
+                else if (!(serverPhase == SERVICE &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -624,7 +624,7 @@ void Monitor::handleMessage(cMessage *msg) {
                 }
 
                 // S1_1_0_n1_n2
-                if (serverPhase == SERVICING &&
+                if (serverPhase == SERVICE &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 0 &&
@@ -634,7 +634,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfS1_1_0_n1_n2[i][j] = simTime();
                     isS1_1_0_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == SERVICING &&
+                else if (!(serverPhase == SERVICE &&
                         queueIndex == 0 &&
                         q[0] == 1 &&
                         q[1] == 0 &&
@@ -646,7 +646,7 @@ void Monitor::handleMessage(cMessage *msg) {
                 }
 
                 // S2_1_1_n1_n2
-                if (serverPhase == SERVICING &&
+                if (serverPhase == SERVICE &&
                         queueIndex == 1 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -656,7 +656,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfS2_1_1_n1_n2[i][j] = simTime();
                     isS2_1_1_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == SERVICING &&
+                else if (!(serverPhase == SERVICE &&
                         queueIndex == 1 &&
                         q[0] == 1 &&
                         q[1] == 1 &&
@@ -668,7 +668,7 @@ void Monitor::handleMessage(cMessage *msg) {
                 }
 
                 // S2_0_1_n1_n2
-                if (serverPhase == SERVICING &&
+                if (serverPhase == SERVICE &&
                         queueIndex == 1 &&
                         q[0] == 0 &&
                         q[1] == 1 &&
@@ -678,7 +678,7 @@ void Monitor::handleMessage(cMessage *msg) {
                     startOfS2_0_1_n1_n2[i][j] = simTime();
                     isS2_0_1_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == SERVICING &&
+                else if (!(serverPhase == SERVICE &&
                         queueIndex == 1 &&
                         q[0] == 0 &&
                         q[1] == 1 &&
@@ -689,29 +689,29 @@ void Monitor::handleMessage(cMessage *msg) {
                     isS2_0_1_n1_n2[i][j] = false;
                 }
 
-                // I_n1_n2
-                if (serverPhase == IDLING &&
+                // V_n1_n2
+                if (serverPhase == VACATION &&
                         n[0] == i &&
                         n[1] == j &&
-                        isI_n1_n2[i][j] == false) {
-                    startOfI_n1_n2[i][j] = simTime();
-                    isI_n1_n2[i][j] = true;
+                        isV_n1_n2[i][j] == false) {
+                    startOfV_n1_n2[i][j] = simTime();
+                    isV_n1_n2[i][j] = true;
                 }
-                else if (!(serverPhase == IDLING &&
+                else if (!(serverPhase == VACATION &&
                         n[0] == i &&
                         n[1] == j) &&
-                        isI_n1_n2[i][j] == true) {
-                    I_n1_n2[i][j].collect(simTime() - startOfI_n1_n2[i][j]);
-                    isI_n1_n2[i][j] = false;
+                        isV_n1_n2[i][j] == true) {
+                    V_n1_n2[i][j].collect(simTime() - startOfV_n1_n2[i][j]);
+                    isV_n1_n2[i][j] = false;
                 }
 
 
             }
-*/
+
 
         // Some specific states for testing --------------------------------------------
         // C1_0_1_0_0
-        if (serverPhase == CONNECTING &&
+        if (serverPhase == CONNECTION &&
                 queueIndex == 0 &&
                 q[0] == 0 &&
                 q[1] == 1 &&
@@ -721,7 +721,7 @@ void Monitor::handleMessage(cMessage *msg) {
             startOfC1_0_1_0_0 = simTime();
             isC1_0_1_0_0 = true;
         }
-        else if (!(serverPhase == CONNECTING &&
+        else if (!(serverPhase == CONNECTION &&
                 queueIndex == 0 &&
                 q[0] == 0 &&
                 q[1] == 1 &&

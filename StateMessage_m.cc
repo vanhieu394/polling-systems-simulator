@@ -152,7 +152,7 @@ void doParsimUnpacking(omnetpp::cCommBuffer *, T& t)
 
 Register_Enum(MsgType, (MsgType::SET_SERVER_PHASE, MsgType::SET_N, MsgType::SET_Q));
 
-Register_Enum(ServerPhase, (ServerPhase::IDLING, ServerPhase::CONNECTING, ServerPhase::SERVICING));
+Register_Enum(ServerPhase, (ServerPhase::VACATION, ServerPhase::CONNECTION, ServerPhase::SERVICE));
 
 Register_Class(StateMessage)
 

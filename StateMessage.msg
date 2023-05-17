@@ -7,9 +7,9 @@ enum MsgType {
 }
 
 enum ServerPhase {
-    IDLING = 0;
-    CONNECTING = 1;
-    SERVICING = 2;
+    VACATION = 0;
+    CONNECTION = 1;
+    SERVICE = 2;
 }
 
 message StateMessage {

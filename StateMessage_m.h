@@ -42,16 +42,16 @@ inline void doParsimUnpacking(omnetpp::cCommBuffer *b, MsgType& e) { int n; b->u
  * <pre>
  * enum ServerPhase
  * {
- *     IDLING = 0;
- *     CONNECTING = 1;
- *     SERVICING = 2;
+ *     VACATION = 0;
+ *     CONNECTION = 1;
+ *     SERVICE = 2;
  * }
  * </pre>
  */
 enum ServerPhase {
-    IDLING = 0,
-    CONNECTING = 1,
-    SERVICING = 2
+    VACATION = 0,
+    CONNECTION = 1,
+    SERVICE = 2
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const ServerPhase& e) { b->pack(static_cast<int>(e)); }
