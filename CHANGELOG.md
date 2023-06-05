@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.8] - 2023-06-05
+### Added
+- Support cyclic polling systems with batch service: exhaustive and gated.
+
+### Fixed
+- Fix incorrectness in network and module names: dynamic adaptive ->adaptive cyclic, Monitor -> MonitorFor2Queues
+- Other minor fixes.
+
 ## [v0.7] - 2023-05-17
 
 ### Added

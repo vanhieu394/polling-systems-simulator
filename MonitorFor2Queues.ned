@@ -1,4 +1,4 @@
-simple Monitor
+simple MonitorFor2Queues
 {
     parameters:
         int numQueues;					// The number of the queues

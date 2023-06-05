@@ -1,4 +1,4 @@
-simple DynamicGatedQueue
+simple AdaptiveCyclicExhaustiveQueue
 {
     parameters:
         volatile double serviceTime;	// Service time of the server in this queue
