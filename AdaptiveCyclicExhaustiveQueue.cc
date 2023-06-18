@@ -9,7 +9,7 @@ using namespace omnetpp;
 class AdaptiveCyclicExhaustiveQueue : public cSimpleModule {
 private:
     cQueue buffer;                      // Buffer to save all packets
-    int queueLen;                       // Current queue length
+    double queueLen;                    // Current queue length
     int ownIndex;                       // Queue's index
     long int cycleNumber;               // Current cycle number
 

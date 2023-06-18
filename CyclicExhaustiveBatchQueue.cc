@@ -8,9 +8,10 @@ using namespace omnetpp;
 
 class CyclicExhaustiveBatchQueue : public cSimpleModule {
 private:
-    cQueue buffer;                      // Buffer to save all packets
-    int queueLen;                       // Current queue length
     int ownIndex;                       // Queue's index
+    cQueue buffer;                      // Buffer to save all packets
+    double queueCapacity;               // Maximum space of the queue
+    double queueLen;                    // Current queue length
     int batchSize;                      // Batch size of this queue
     int sizeOfCurrBatch;                // Size of the current batch
     long int cycleNumber;               // Current cycle number
@@ -50,9 +51,10 @@ CyclicExhaustiveBatchQueue::~CyclicExhaustiveBatchQueue() {
 }
 
 void CyclicExhaustiveBatchQueue::initialize() {
-    buffer.setName("buffer");
-    queueLen = 0;
     ownIndex = par("ownIndex");
+    buffer.setName("buffer");
+    queueCapacity = par("queueCapacity");
+    queueLen = 0;
     batchSize = par("batchSize");
     sizeOfCurrBatch = 0;
     cycleNumber = 0;
@@ -168,9 +170,12 @@ void CyclicExhaustiveBatchQueue::handleMessage(cMessage *msg) {
             scheduleAt(simTime(), takeBatchEvent);
     }
 
-    // Insert packets from the generator to the buffer
-    else {
-        buffer.insert(msg);
-        queueLen++;
-    }
+    // Insert packet from the generator to the buffer if there is space for it
+    else
+        if (queueLen < queueCapacity) {
+            buffer.insert(msg);
+            queueLen++;
+        }
+        else
+            delete(msg);
 }

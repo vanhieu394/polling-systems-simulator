@@ -1,8 +1,8 @@
 simple AdaptiveCyclicExhaustiveQueue
 {
     parameters:
-        volatile double serviceTime;	// Service time of the server in this queue
         int ownIndex;					// Queue's index
+        volatile double serviceTime;	// Service time of the server in this queue
         @display("i=block/queue");
     gates:
         input in;						// From the generator

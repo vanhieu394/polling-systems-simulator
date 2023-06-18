@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.8.1] - 2023-06-19
+### Added
+- Added queueCapacity parameter to polling systems with batch service
+
+### Changed
+- Changed type of queueLen from int to double
+
 ## [v0.8] - 2023-06-05
 ### Added
 - Support cyclic polling systems with batch service: exhaustive and gated.

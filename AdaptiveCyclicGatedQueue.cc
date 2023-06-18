@@ -9,8 +9,8 @@ using namespace omnetpp;
 class AdaptiveCyclicGatedQueue : public cSimpleModule {
 private:
     cQueue buffer;                      // Buffer to save all packets
-    int queueLen;                       // Current queue length
-    int servLen;                        // The number of packets that the server has to service
+    double queueLen;                    // Current queue length
+    double servLen;                     // The number of packets that the server has to service
     int ownIndex;                       // Queue's index
     long int cycleNumber;               // Current cycle number
 

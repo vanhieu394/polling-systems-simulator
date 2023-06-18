@@ -8,9 +8,11 @@ using namespace omnetpp;
 
 class CyclicGatedBatchQueue : public cSimpleModule {
 private:
-    cQueue buffer;                      // Buffer to save all packets
-    int servLen;                        // The number of packets that the server has to service
     int ownIndex;                       // Queue's index
+    cQueue buffer;                      // Buffer to save all packets
+    double queueCapacity;               // Maximum space of the queue
+    double queueLen;                    // Current queue length
+    double servLen;                     // The number of packets that the server has to service
     int batchSize;                      // Batch size of this queue
     int sizeOfCurrBatch;                // Size of the current batch
     long int cycleNumber;               // Current cycle number
@@ -50,9 +52,11 @@ CyclicGatedBatchQueue::~CyclicGatedBatchQueue() {
 }
 
 void CyclicGatedBatchQueue::initialize() {
-    buffer.setName("buffer");
-    servLen = 0;
     ownIndex = par("ownIndex");
+    buffer.setName("buffer");
+    queueCapacity = par("queueCapacity");
+    queueLen = 0;
+    servLen = 0;
     batchSize = par("batchSize");
     sizeOfCurrBatch = 0;
     cycleNumber = 0;
@@ -117,8 +121,9 @@ void CyclicGatedBatchQueue::handleMessage(cMessage *msg) {
 //        EV << "Current cycle in Q[" << ownIndex << "] = "
 //                << cycleNumber << "\n";
 
-        servLen = buffer.getLength();
-        if (servLen == 0) {
+        queueLen = buffer.getLength();
+        servLen = queueLen;
+        if (queueLen == 0) {
             // Send "Queue is empty" msg to the server
             send(new cMessage("Queue is empty", ownIndex), "server$o");
             leavingMoment = simTime();
@@ -156,10 +161,11 @@ void CyclicGatedBatchQueue::handleMessage(cMessage *msg) {
 
             // Send out the batch to the server
             send(batch[i], "server$o");
+            queueLen--;
             servLen--;
         }
 
-        // Check if queue is empty
+        // Check if the queue is served
         if (servLen == 0) {
             send(new cMessage("Queue has been served", ownIndex), "server$o");
             leavingMoment = simTime();
@@ -168,7 +174,12 @@ void CyclicGatedBatchQueue::handleMessage(cMessage *msg) {
             scheduleAt(simTime(), takeBatchEvent);
     }
 
-    // Insert packets from the generator to the buffer
+    // Insert packet from the generator to the buffer if there is space for it
     else
-        buffer.insert(msg);
+        if (queueLen < queueCapacity) {
+            buffer.insert(msg);
+            queueLen++;
+        }
+        else
+            delete(msg);
 }

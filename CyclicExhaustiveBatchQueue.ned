@@ -1,9 +1,10 @@
 simple CyclicExhaustiveBatchQueue
 {
     parameters:
+        int ownIndex;					// Queue's index
+        double queueCapacity;			// Maximum space of the queue
         volatile double serviceTime;	// Service time of the server in this queue
         int batchSize;					// Batch size of this queue
-        int ownIndex;					// Queue's index
         @display("i=block/queue");
         @display("q=buffer");
         
