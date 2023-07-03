@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.8.2] - 2023-07-03
+### Added
+- Added CyclicExhaustiveBatchPollingSystemWith3QueuesAndMonitor network to measure its steady state probabilites.
+
 ## [v0.8.1] - 2023-06-19
 ### Added
 - Added queueCapacity parameter to polling systems with batch service

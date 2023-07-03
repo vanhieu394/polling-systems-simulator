@@ -139,3 +139,42 @@ network CyclicGatedBatchPollingSystem
         }
         cyclicServer.toSink --> sink.in;
 }
+
+// #5 - Cyclic polling systems with exhaustive batch service with 2 queues and monitor
+network CyclicExhaustiveBatchPollingSystemWith3QueuesAndMonitor
+{
+    parameters:
+        int numQueues;
+    submodules:
+        generator[numQueues]: Generator {
+            @display("p=700,100,c,100");
+        }
+
+        cyclicExhaustiveBatchQueueWithMonitor[numQueues]: CyclicExhaustiveBatchQueueWithMonitor {
+            @display("p=500,100,c,100");
+            ownIndex = index;
+        }
+
+        cyclicServerWithMonitor: CyclicServerWithMonitor {
+            numQueues = parent.numQueues;
+            @display("p=300,100");
+        }
+        
+        sink: Sink {
+            @display("p=100,100");
+        }
+        
+        monitorFor3BatchQueues: MonitorFor3BatchQueues {
+            numQueues = parent.numQueues;
+            @display("p=300,200");
+        }
+
+    connections:
+        for i=0..numQueues-1 {
+            generator[i].out --> cyclicExhaustiveBatchQueueWithMonitor[i].in;
+            cyclicExhaustiveBatchQueueWithMonitor[i].server <--> cyclicServerWithMonitor.queue[i];
+            cyclicExhaustiveBatchQueueWithMonitor[i].toMonitor --> monitorFor3BatchQueues.fromQueue[i];
+        }
+        cyclicServerWithMonitor.toMonitor --> monitorFor3BatchQueues.fromServer;
+        cyclicServerWithMonitor.toSink --> sink.in;
+}
