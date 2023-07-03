@@ -1,0 +1,33 @@
+** Event #0   t=0   Elapsed: 2e-06s (0m 00s)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 9   present: 9   in FES: 3
+** Event #10505216   t=4128.20054517355   Elapsed: 2.00003s (0m 02s)
+     Speed:     ev/sec=5.25252e+06   simsec/sec=2064.07   ev/simsec=2544.74
+     Messages:  created: 4865891   present: 10   in FES: 2
+** Event #21213696   t=8329.223075367482   Elapsed: 4.00007s (0m 04s)
+     Speed:     ev/sec=5.35414e+06   simsec/sec=2100.47   ev/simsec=2549.02
+     Messages:  created: 9826757   present: 10   in FES: 2
+** Event #31919360   t=12521.425980473189   Elapsed: 6.00009s (0m 06s)
+     Speed:     ev/sec=5.35277e+06   simsec/sec=2096.08   ev/simsec=2553.71
+     Messages:  created: 14788633   present: 11   in FES: 3
+** Event #42057728   t=16497.048557854518   Elapsed: 8.00014s (0m 08s)
+     Speed:     ev/sec=5.06908e+06   simsec/sec=1987.77   ev/simsec=2550.13
+     Messages:  created: 19486140   present: 9   in FES: 2
+** Event #52614912   t=20646.665862446385   Elapsed: 10.0002s (0m 10s)
+     Speed:     ev/sec=5.27853e+06   simsec/sec=2074.78   ev/simsec=2544.13
+     Messages:  created: 24376451   present: 10   in FES: 2
+** Event #63546880   t=24955.839081238162   Elapsed: 12.0002s (0m 12s)
+     Speed:     ev/sec=5.4659e+06   simsec/sec=2154.55   ev/simsec=2536.91
+     Messages:  created: 29438815   present: 9   in FES: 2
+** Event #74527488   t=29268.194984870275   Elapsed: 14.0002s (0m 14s)
+     Speed:     ev/sec=5.4903e+06   simsec/sec=2156.18   ev/simsec=2546.31
+     Messages:  created: 34524513   present: 10   in FES: 2
+** Event #85297408   t=33505.000329639605   Elapsed: 16.0002s (0m 16s)
+     Speed:     ev/sec=5.38495e+06   simsec/sec=2118.4   ev/simsec=2541.99
+     Messages:  created: 39512916   present: 9   in FES: 2
+** Event #93695998   t=36802.308176495953   Elapsed: 17.5703s (0m 17s)
+     Speed:     ev/sec=5.34893e+06   simsec/sec=2100   ev/simsec=2547.1
+     Messages:  created: 43404943   present: 10   in FES: 3
+
+<!> Simulation stopped with endSimulation() -- in module (Sink) CyclicExhaustiveBatchPollingSystem.sink (id=7), at t=36802.308176495953s, event #93695998
+undisposed object: (omnetpp::cMessage) CyclicExhaustiveBatchPollingSystem.sink.packet -- check module destructor

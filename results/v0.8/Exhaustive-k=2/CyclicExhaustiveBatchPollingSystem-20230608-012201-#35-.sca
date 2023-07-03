@@ -1,0 +1,66 @@
+version 3
+run CyclicExhaustiveBatchPollingSystem-6-20230608-01:22:01-24320
+attr configname CyclicExhaustiveBatchPollingSystem
+attr datetime 20230608-01:22:01
+attr datetimef 20230608-012201
+attr experiment CyclicExhaustiveBatchPollingSystem
+attr inifile omnetpp.ini
+attr iterationvars $0=35
+attr iterationvarsd 35
+attr iterationvarsf 35-
+attr measurement $0=35
+attr network CyclicExhaustiveBatchPollingSystem
+attr processid 24320
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 6
+attr seedset 6
+config cmdenv-redirect-output true
+config description "Cyclic Exhaustive Batch Polling System"
+config network CyclicExhaustiveBatchPollingSystem
+config *.numQueues 2
+config *.generator[*].interarrivalTime exponential(1/35)
+config *.cyclicExhaustiveBatchQueue[*].serviceTime exponential(1/100)
+config *.cyclicExhaustiveBatchQueue[*].batchSize 2
+config *.cyclicServer.switchoverTime "\"0.001 0.001\""
+config rng-class cMersenneTwister
+config output-scalar-file results/CyclicExhaustiveBatchPollingSystem-20230608-012201-#35-.sca
+config cmdenv-output-file results/CyclicExhaustiveBatchPollingSystem-20230608-012201-#35-.out
+
+par CyclicExhaustiveBatchPollingSystem.generator[0] typename "\"Generator\""
+par CyclicExhaustiveBatchPollingSystem.generator[0] interarrivalTime exponential(0.0285714)
+par CyclicExhaustiveBatchPollingSystem.generator[1] typename "\"Generator\""
+par CyclicExhaustiveBatchPollingSystem.generator[1] interarrivalTime exponential(0.0285714)
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] typename "\"CyclicExhaustiveBatchQueue\""
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] serviceTime exponential(0.01)
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] batchSize 2
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] ownIndex 0
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] "Mean queue length at its polling moment in queue[0]" 0.11780985995818
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] "Mean waiting time in queue[0]" 0.010200945868321
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] "Mean sojourn time in queue[0]" 0.020199911682348
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] "Mean cycle time in queue[0]" 0.0047295559096005
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] "Mean intervisit time in queue[0]" 0.0033632000589094
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[0] "Number of cycle in queue[0]" 12878938
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] typename "\"CyclicExhaustiveBatchQueue\""
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] serviceTime exponential(0.01)
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] batchSize 2
+par CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] ownIndex 1
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] "Mean queue length at its polling moment in queue[1]" 0.117793873998
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] "Mean waiting time in queue[1]" 0.010245282232789
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] "Mean sojourn time in queue[1]" 0.020222622587705
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] "Mean cycle time in queue[1]" 0.0047295553327314
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] "Mean intervisit time in queue[1]" 0.0033672939407052
+scalar CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue[1] "Number of cycle in queue[1]" 12878937
+par CyclicExhaustiveBatchPollingSystem.cyclicServer typename "\"CyclicServer\""
+par CyclicExhaustiveBatchPollingSystem.cyclicServer switchoverTime "\"0.001 0.001\""
+par CyclicExhaustiveBatchPollingSystem.cyclicServer numQueues 2
+scalar CyclicExhaustiveBatchPollingSystem.cyclicServer "Mean cycle time in the server" 0.0047295559249012
+scalar CyclicExhaustiveBatchPollingSystem.cyclicServer "Number of cycle" 12878938
+par CyclicExhaustiveBatchPollingSystem.sink typename "\"Sink\""
+scalar CyclicExhaustiveBatchPollingSystem.sink "Mean sojourn time" 0.020211264772826
+scalar CyclicExhaustiveBatchPollingSystem.sink "Number of packets" 4263945
+scalar CyclicExhaustiveBatchPollingSystem.sink "Working time" 24.099
+par CyclicExhaustiveBatchPollingSystem typename "\"CyclicExhaustiveBatchPollingSystem\""
+par CyclicExhaustiveBatchPollingSystem numQueues 2
+

@@ -26,29 +26,29 @@ private:
     constexpr static int qCap2 = 20;
     constexpr static int qCap3 = 20;
 
-    cStdDev C1_n1_n2_n3[qCap1][qCap2][qCap3];
-    bool isC1_n1_n2_n3[qCap1][qCap2][qCap3];
-    simtime_t startOfC1_n1_n2_n3[qCap1][qCap2][qCap3];
+    cStdDev C1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    bool isC1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    simtime_t startOfC1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
 
-    cStdDev C2_n1_n2_n3[qCap1][qCap2][qCap3];
-    bool isC2_n1_n2_n3[qCap1][qCap2][qCap3];
-    simtime_t startOfC2_n1_n2_n3[qCap1][qCap2][qCap3];
+    cStdDev C2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    bool isC2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    simtime_t startOfC2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
 
-    cStdDev C3_n1_n2_n3[qCap1][qCap2][qCap3];
-    bool isC3_n1_n2_n3[qCap1][qCap2][qCap3];
-    simtime_t startOfC3_n1_n2_n3[qCap1][qCap2][qCap3];
+    cStdDev C3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    bool isC3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    simtime_t startOfC3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
 
-    cStdDev S1_n1_n2_n3[qCap1][qCap2][qCap3];
-    bool isS1_n1_n2_n3[qCap1][qCap2][qCap3];
-    simtime_t startOfS1_n1_n2_n3[qCap1][qCap2][qCap3];
+    cStdDev S1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    bool isS1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    simtime_t startOfS1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
 
-    cStdDev S2_n1_n2_n3[qCap1][qCap2][qCap3];
-    bool isS2_n1_n2_n3[qCap1][qCap2][qCap3];
-    simtime_t startOfS2_n1_n2_n3[qCap1][qCap2][qCap3];
+    cStdDev S2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    bool isS2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    simtime_t startOfS2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
 
-    cStdDev S3_n1_n2_n3[qCap1][qCap2][qCap3];
-    bool isS3_n1_n2_n3[qCap1][qCap2][qCap3];
-    simtime_t startOfS3_n1_n2_n3[qCap1][qCap2][qCap3];
+    cStdDev S3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    bool isS3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    simtime_t startOfS3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
 
 public:
     MonitorFor3BatchQueues();

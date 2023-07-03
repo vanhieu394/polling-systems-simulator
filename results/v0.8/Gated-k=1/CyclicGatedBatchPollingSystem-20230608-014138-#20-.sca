@@ -1,0 +1,66 @@
+version 3
+run CyclicGatedBatchPollingSystem-2-20230608-01:41:38-6788
+attr configname CyclicGatedBatchPollingSystem
+attr datetime 20230608-01:41:38
+attr datetimef 20230608-014138
+attr experiment CyclicGatedBatchPollingSystem
+attr inifile omnetpp.ini
+attr iterationvars $0=20
+attr iterationvarsd 20
+attr iterationvarsf 20-
+attr measurement $0=20
+attr network CyclicGatedBatchPollingSystem
+attr processid 6788
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 2
+attr seedset 2
+config cmdenv-redirect-output true
+config description "Cyclic Gated Batch Polling System"
+config network CyclicGatedBatchPollingSystem
+config *.numQueues 2
+config *.generator[*].interarrivalTime exponential(1/20)
+config *.cyclicGatedBatchQueue[*].serviceTime exponential(1/100)
+config *.cyclicGatedBatchQueue[*].batchSize 1
+config *.cyclicServer.switchoverTime "\"0.001 0.001\""
+config rng-class cMersenneTwister
+config output-scalar-file results/CyclicGatedBatchPollingSystem-20230608-014138-#20-.sca
+config cmdenv-output-file results/CyclicGatedBatchPollingSystem-20230608-014138-#20-.out
+
+par CyclicGatedBatchPollingSystem.generator[0] typename "\"Generator\""
+par CyclicGatedBatchPollingSystem.generator[0] interarrivalTime exponential(0.05)
+par CyclicGatedBatchPollingSystem.generator[1] typename "\"Generator\""
+par CyclicGatedBatchPollingSystem.generator[1] interarrivalTime exponential(0.05)
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] typename "\"CyclicGatedBatchQueue\""
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] serviceTime exponential(0.01)
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] batchSize 1
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] ownIndex 0
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] "Mean queue length at its polling moment in queue[0]" 0.066638976566648
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] "Mean waiting time in queue[0]" 0.0091486482839333
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] "Mean sojourn time in queue[0]" 0.019135572108323
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] "Mean cycle time in queue[0]" 0.0033318527661194
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] "Mean intervisit time in queue[0]" 0.0026663345852981
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[0] "Number of cycle in queue[0]" 17642887
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] typename "\"CyclicGatedBatchQueue\""
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] serviceTime exponential(0.01)
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] batchSize 1
+par CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] ownIndex 1
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] "Mean queue length at its polling moment in queue[1]" 0.066725413662434
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] "Mean waiting time in queue[1]" 0.0091300119449415
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] "Mean sojourn time in queue[1]" 0.019114762846261
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] "Mean cycle time in queue[1]" 0.0033318529857237
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] "Mean intervisit time in queue[1]" 0.0026656163371385
+scalar CyclicGatedBatchPollingSystem.cyclicGatedBatchQueue[1] "Number of cycle in queue[1]" 17642887
+par CyclicGatedBatchPollingSystem.cyclicServer typename "\"CyclicServer\""
+par CyclicGatedBatchPollingSystem.cyclicServer switchoverTime "\"0.001 0.001\""
+par CyclicGatedBatchPollingSystem.cyclicServer numQueues 2
+scalar CyclicGatedBatchPollingSystem.cyclicServer "Mean cycle time in the server" 0.0033318526287812
+scalar CyclicGatedBatchPollingSystem.cyclicServer "Number of cycle" 17642887
+par CyclicGatedBatchPollingSystem.sink typename "\"Sink\""
+scalar CyclicGatedBatchPollingSystem.sink "Mean sojourn time" 0.019125160733767
+scalar CyclicGatedBatchPollingSystem.sink "Number of packets" 2352933
+scalar CyclicGatedBatchPollingSystem.sink "Working time" 26.544
+par CyclicGatedBatchPollingSystem typename "\"CyclicGatedBatchPollingSystem\""
+par CyclicGatedBatchPollingSystem numQueues 2
+

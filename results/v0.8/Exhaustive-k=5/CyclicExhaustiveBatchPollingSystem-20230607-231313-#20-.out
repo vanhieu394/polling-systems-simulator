@@ -1,0 +1,21 @@
+** Event #0   t=0   Elapsed: 3e-06s (0m 00s)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 9   present: 9   in FES: 3
+** Event #11051264   t=3964.541166291862   Elapsed: 2.00001s (0m 02s)
+     Speed:     ev/sec=5.5256e+06   simsec/sec=1982.26   ev/simsec=2787.53
+     Messages:  created: 5224272   present: 10   in FES: 2
+** Event #22127616   t=7954.988920995569   Elapsed: 4.00003s (0m 04s)
+     Speed:     ev/sec=5.53812e+06   simsec/sec=1995.2   ev/simsec=2775.72
+     Messages:  created: 10458261   present: 10   in FES: 2
+** Event #33166080   t=11924.712908644822   Elapsed: 6.00005s (0m 06s)
+     Speed:     ev/sec=5.5192e+06   simsec/sec=1984.85   ev/simsec=2780.66
+     Messages:  created: 15675399   present: 9   in FES: 2
+** Event #44064512   t=15837.84562812453   Elapsed: 8.00008s (0m 08s)
+     Speed:     ev/sec=5.44912e+06   simsec/sec=1956.53   ev/simsec=2785.09
+     Messages:  created: 20827780   present: 10   in FES: 2
+** Event #53616895   t=19276.330386164486   Elapsed: 9.73323s (0m 09s)
+     Speed:     ev/sec=5.51159e+06   simsec/sec=1983.96   ev/simsec=2778.08
+     Messages:  created: 25341728   present: 10   in FES: 3
+
+<!> Simulation stopped with endSimulation() -- in module (Sink) CyclicExhaustiveBatchPollingSystem.sink (id=7), at t=19276.330386164486s, event #53616895
+undisposed object: (omnetpp::cMessage) CyclicExhaustiveBatchPollingSystem.sink.packet -- check module destructor

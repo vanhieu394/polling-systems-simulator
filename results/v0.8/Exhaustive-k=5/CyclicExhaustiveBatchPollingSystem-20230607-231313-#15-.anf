@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<analysis version="2">
+    <inputs>
+        <input pattern="/polling-systems-simulator/results/CyclicExhaustiveBatchPollingSystem-20230607-231313-#15-.vec"/>
+        <input pattern="/polling-systems-simulator/results/CyclicExhaustiveBatchPollingSystem-20230607-231313-#15-.sca"/>
+    </inputs>
+    <charts/>
+</analysis>

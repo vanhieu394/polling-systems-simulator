@@ -1,0 +1,27 @@
+** Event #0   t=0   Elapsed: 2e-06s (0m 00s)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 9   present: 9   in FES: 3
+** Event #10427904   t=4946.179665767514   Elapsed: 2.00003s (0m 02s)
+     Speed:     ev/sec=5.21388e+06   simsec/sec=2473.06   ev/simsec=2108.27
+     Messages:  created: 4585394   present: 9   in FES: 2
+** Event #21059328   t=10015.073576345535   Elapsed: 4.0001s (0m 04s)
+     Speed:     ev/sec=5.31552e+06   simsec/sec=2534.36   ev/simsec=2097.39
+     Messages:  created: 9254982   present: 12   in FES: 3
+** Event #31656448   t=15046.243163336463   Elapsed: 6.00015s (0m 06s)
+     Speed:     ev/sec=5.29842e+06   simsec/sec=2515.52   ev/simsec=2106.29
+     Messages:  created: 13914981   present: 10   in FES: 2
+** Event #42131456   t=20024.639662844787   Elapsed: 8.00016s (0m 08s)
+     Speed:     ev/sec=5.23749e+06   simsec/sec=2489.19   ev/simsec=2104.09
+     Messages:  created: 18519367   present: 9   in FES: 2
+** Event #52222464   t=24818.57814956332   Elapsed: 10.0002s (0m 10s)
+     Speed:     ev/sec=5.04539e+06   simsec/sec=2396.92   ev/simsec=2104.95
+     Messages:  created: 22954831   present: 9   in FES: 2
+** Event #62627584   t=29760.475941240627   Elapsed: 12.0002s (0m 12s)
+     Speed:     ev/sec=5.20247e+06   simsec/sec=2470.91   ev/simsec=2105.49
+     Messages:  created: 27529240   present: 10   in FES: 2
+** Event #68825843   t=32704.353391181261   Elapsed: 13.1646s (0m 13s)
+     Speed:     ev/sec=5.32318e+06   simsec/sec=2528.26   ev/simsec=2105.47
+     Messages:  created: 30253792   present: 11   in FES: 3
+
+<!> Simulation stopped with endSimulation() -- in module (Sink) CyclicGatedBatchPollingSystem.sink (id=7), at t=32704.353391181261s, event #68825843
+undisposed object: (omnetpp::cMessage) CyclicGatedBatchPollingSystem.sink.packet -- check module destructor

@@ -1,0 +1,58 @@
+** Event #0   t=0   Elapsed: 2e-06s (0m 00s)
+     Speed:     ev/sec=0   simsec/sec=0   ev/simsec=0
+     Messages:  created: 9   present: 9   in FES: 3
+** Event #10436096   t=5255.356187993232   Elapsed: 2.00001s (0m 02s)
+     Speed:     ev/sec=5.21802e+06   simsec/sec=2627.66   ev/simsec=1985.8
+     Messages:  created: 4474938   present: 10   in FES: 2
+** Event #20870912   t=10494.716258041383   Elapsed: 4.00002s (0m 04s)
+     Speed:     ev/sec=5.21738e+06   simsec/sec=2619.67   ev/simsec=1991.62
+     Messages:  created: 8951146   present: 9   in FES: 2
+** Event #31526400   t=15859.772292853429   Elapsed: 6.00005s (0m 06s)
+     Speed:     ev/sec=5.32768e+06   simsec/sec=2682.5   ev/simsec=1986.09
+     Messages:  created: 13520515   present: 11   in FES: 3
+** Event #42038784   t=21153.504513057065   Elapsed: 8.00006s (0m 08s)
+     Speed:     ev/sec=5.25615e+06   simsec/sec=2646.84   ev/simsec=1985.82
+     Messages:  created: 18028206   present: 10   in FES: 2
+** Event #52484864   t=26393.272783792701   Elapsed: 10.0001s (0m 10s)
+     Speed:     ev/sec=5.22302e+06   simsec/sec=2619.87   ev/simsec=1993.61
+     Messages:  created: 22511883   present: 9   in FES: 2
+** Event #63025408   t=31704.795321523449   Elapsed: 12.0001s (0m 12s)
+     Speed:     ev/sec=5.27027e+06   simsec/sec=2655.76   ev/simsec=1984.47
+     Messages:  created: 27031247   present: 11   in FES: 3
+** Event #73473024   t=36964.624159929904   Elapsed: 14.0001s (0m 14s)
+     Speed:     ev/sec=5.2237e+06   simsec/sec=2629.86   ev/simsec=1986.3
+     Messages:  created: 31511245   present: 9   in FES: 2
+** Event #83980032   t=42248.925782243808   Elapsed: 16.0001s (0m 16s)
+     Speed:     ev/sec=5.25346e+06   simsec/sec=2642.13   ev/simsec=1988.34
+     Messages:  created: 36018617   present: 9   in FES: 2
+** Event #94362880   t=47481.29249249454   Elapsed: 18.0002s (0m 18s)
+     Speed:     ev/sec=5.19128e+06   simsec/sec=2616.11   ev/simsec=1984.35
+     Messages:  created: 40468932   present: 9   in FES: 2
+** Event #104876544   t=52802.648330247281   Elapsed: 20.0002s (0m 20s)
+     Speed:     ev/sec=5.2567e+06   simsec/sec=2660.61   ev/simsec=1975.75
+     Messages:  created: 44972205   present: 10   in FES: 2
+** Event #115312896   t=58062.807083620491   Elapsed: 22.0002s (0m 22s)
+     Speed:     ev/sec=5.21817e+06   simsec/sec=2630.08   ev/simsec=1984.04
+     Messages:  created: 49448512   present: 9   in FES: 2
+** Event #125726464   t=63290.208814704468   Elapsed: 24.0003s (0m 24s)
+     Speed:     ev/sec=5.20666e+06   simsec/sec=2613.64   ev/simsec=1992.11
+     Messages:  created: 53917572   present: 12   in FES: 3
+** Event #136167424   t=68542.186251598603   Elapsed: 26.0003s (0m 26s)
+     Speed:     ev/sec=5.22043e+06   simsec/sec=2625.96   ev/simsec=1988.01
+     Messages:  created: 58394648   present: 10   in FES: 2
+** Event #146501888   t=73741.954896323074   Elapsed: 28.0003s (0m 28s)
+     Speed:     ev/sec=5.16713e+06   simsec/sec=2599.83   ev/simsec=1987.49
+     Messages:  created: 62827186   present: 9   in FES: 2
+** Event #157125120   t=79081.851171624681   Elapsed: 30.0004s (0m 30s)
+     Speed:     ev/sec=5.31157e+06   simsec/sec=2669.92   ev/simsec=1989.41
+     Messages:  created: 67382344   present: 11   in FES: 2
+** Event #167660032   t=84376.411638516944   Elapsed: 32.0004s (0m 32s)
+     Speed:     ev/sec=5.26743e+06   simsec/sec=2647.27   ev/simsec=1989.76
+     Messages:  created: 71900704   present: 10   in FES: 2
+** Event #176331435   t=88741.301710544027   Elapsed: 33.6514s (0m 33s)
+     Speed:     ev/sec=5.25199e+06   simsec/sec=2643.67   ev/simsec=1986.63
+     Messages:  created: 75618928   present: 11   in FES: 3
+
+<!> Simulation stopped with endSimulation() -- in module (Sink) CyclicExhaustiveBatchPollingSystem.sink (id=7), at t=88741.301710544027s, event #176331435
+undisposed object: (omnetpp::cMessage) CyclicExhaustiveBatchPollingSystem.sink.packet -- check module destructor
+undisposed object: (omnetpp::cMessage) CyclicExhaustiveBatchPollingSystem.cyclicExhaustiveBatchQueue.packet -- check module destructor

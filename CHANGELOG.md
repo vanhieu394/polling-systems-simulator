@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.8.2.2] - 2023-07-03
+### Fixed
+- Fixed some other bugs in MonitorFor3BatchQueues module.
+
 ## [v0.8.2.1] - 2023-07-03
 ### Fixed
 - Fixed bugs in MonitorFor3BatchQueues module.
