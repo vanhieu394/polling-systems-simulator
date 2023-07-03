@@ -81,9 +81,9 @@ void MonitorFor3BatchQueues::initialize() {
     startOfC1 = startOfC2 = startOfC3 = startOfS1 = startOfS2 = startOfS3 = 0;
 
     // States with all variables: serverPhase, n1, n2, n3
-    for (int i = 0; i < qCap1; i++)
-        for (int j = 0; j < qCap2; j++)
-            for (int k = 0; k < qCap3; k++) {
+    for (int i = 0; i <= qCap1; i++)
+        for (int j = 0; j <= qCap2; j++)
+            for (int k = 0; k <= qCap3; k++) {
                 isC1_n1_n2_n3[i][j][k] = false;
                 startOfC1_n1_n2_n3[i][j][k] = 0;
 
@@ -116,54 +116,54 @@ void MonitorFor3BatchQueues::finish() {
     recordScalar("Probability S3", S3.getSum() * 100 / simTime());
 
     // States with all variables: serverPhase, n1, n2, n3
-    for (int i = 0; i < qCap1; i++)
-        for (int j = 0; j < qCap2; j++)
-            for (int k = 0; k < qCap3; k++) {
+    for (int i = 0; i <= qCap1; i++)
+        for (int j = 0; j <= qCap2; j++)
+            for (int k = 0; k <= qCap3; k++) {
                     std::string nameString = "Probability C1_" + std::to_string(i)
                             + "_" + std::to_string(j) + "_" + std::to_string(k);
                     const char *name = nameString.c_str();
                     recordScalar(name, C1_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
                 }
 
-    for (int i = 0; i < qCap1; i++)
-        for (int j = 0; j < qCap2; j++)
-            for (int k = 0; k < qCap3; k++) {
+    for (int i = 0; i <= qCap1; i++)
+        for (int j = 0; j <= qCap2; j++)
+            for (int k = 0; k <= qCap3; k++) {
                     std::string nameString = "Probability C2_" + std::to_string(i)
                             + "_" + std::to_string(j) + "_" + std::to_string(k);
                     const char *name = nameString.c_str();
                     recordScalar(name, C2_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
                 }
 
-    for (int i = 0; i < qCap1; i++)
-        for (int j = 0; j < qCap2; j++)
-            for (int k = 0; k < qCap3; k++) {
+    for (int i = 0; i <= qCap1; i++)
+        for (int j = 0; j <= qCap2; j++)
+            for (int k = 0; k <= qCap3; k++) {
                     std::string nameString = "Probability C3_" + std::to_string(i)
                             + "_" + std::to_string(j) + "_" + std::to_string(k);
                     const char *name = nameString.c_str();
                     recordScalar(name, C3_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
                 }
 
-    for (int i = 0; i < qCap1; i++)
-        for (int j = 0; j < qCap2; j++)
-            for (int k = 0; k < qCap3; k++) {
+    for (int i = 0; i <= qCap1; i++)
+        for (int j = 0; j <= qCap2; j++)
+            for (int k = 0; k <= qCap3; k++) {
                     std::string nameString = "Probability S1_" + std::to_string(i)
                             + "_" + std::to_string(j) + "_" + std::to_string(k);
                     const char *name = nameString.c_str();
                     recordScalar(name, S1_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
                 }
 
-    for (int i = 0; i < qCap1; i++)
-        for (int j = 0; j < qCap2; j++)
-            for (int k = 0; k < qCap3; k++) {
+    for (int i = 0; i <= qCap1; i++)
+        for (int j = 0; j <= qCap2; j++)
+            for (int k = 0; k <= qCap3; k++) {
                     std::string nameString = "Probability S2_" + std::to_string(i)
                             + "_" + std::to_string(j) + "_" + std::to_string(k);
                     const char *name = nameString.c_str();
                     recordScalar(name, S2_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
                 }
 
-    for (int i = 0; i < qCap1; i++)
-        for (int j = 0; j < qCap2; j++)
-            for (int k = 0; k < qCap3; k++) {
+    for (int i = 0; i <= qCap1; i++)
+        for (int j = 0; j <= qCap2; j++)
+            for (int k = 0; k <= qCap3; k++) {
                     std::string nameString = "Probability S3_" + std::to_string(i)
                             + "_" + std::to_string(j) + "_" + std::to_string(k);
                     const char *name = nameString.c_str();
