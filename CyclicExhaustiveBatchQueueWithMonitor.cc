@@ -125,17 +125,9 @@ void CyclicExhaustiveBatchQueueWithMonitor::handleMessage(cMessage *msg) {
             send(new cMessage("Queue is empty", ownIndex), "server$o");
             leavingMoment = simTime();
         }
-        else {
-            // Update system state
-            StateMessage *stateMsg = new StateMessage("SERVICE phase");
-            stateMsg->setMsgType(SET_SERVER_PHASE);
-            stateMsg->setServerPhase(SERVICE);
-            stateMsg->setQueueIndex(ownIndex);
-            send(stateMsg, "toMonitor");
-
+        else
             // Start servicing
             scheduleAt(simTime(), takeBatchEvent);
-        }
     }
 
     // Serve the batch
@@ -145,6 +137,14 @@ void CyclicExhaustiveBatchQueueWithMonitor::handleMessage(cMessage *msg) {
             sizeOfCurrBatch = batchSize;
         else
             sizeOfCurrBatch = queueLen;
+
+        // Update system state
+        StateMessage *stateMsg = new StateMessage("SERVICE phase");
+        stateMsg->setMsgType(SET_SERVER_PHASE);
+        stateMsg->setServerPhase(SERVICE);
+        stateMsg->setQueueIndex(ownIndex);
+        stateMsg->setKc(sizeOfCurrBatch);
+        send(stateMsg, "toMonitor");
 
         // Take out the batch from buffer and serve it
         for (int i = 0; i < sizeOfCurrBatch; i++) {

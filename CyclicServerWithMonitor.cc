@@ -81,6 +81,7 @@ void CyclicServerWithMonitor::handleMessage(cMessage *msg) {
         stateMsg->setMsgType(SET_SERVER_PHASE);
         stateMsg->setServerPhase(CONNECTION);
         stateMsg->setQueueIndex(gateInId);
+        stateMsg->setKc(0);
         send(stateMsg, "toMonitor");
 
         double switchoverTime = exponential(arrayDouble[gateInId]);
@@ -105,6 +106,7 @@ void CyclicServerWithMonitor::handleMessage(cMessage *msg) {
             stateMsg->setMsgType(SET_SERVER_PHASE);
             stateMsg->setServerPhase(CONNECTION);
             stateMsg->setQueueIndex(gateInId);
+            stateMsg->setKc(0);
             send(stateMsg, "toMonitor");
 
             double switchoverTime = exponential(arrayDouble[gateInId]);

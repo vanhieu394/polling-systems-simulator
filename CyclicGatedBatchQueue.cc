@@ -11,11 +11,13 @@ private:
     int ownIndex;                       // Queue's index
     cQueue buffer;                      // Buffer to save all packets
     double queueCapacity;               // Maximum space of the queue
-    double queueLen;                    // Current queue length
+    double currQueueLen;                    // Current queue length
     double servLen;                     // The number of packets that the server has to service
     int batchSize;                      // Batch size of this queue
     int sizeOfCurrBatch;                // Size of the current batch
     long int cycleNumber;               // Current cycle number
+    double numPacket;            // Number of arrival packet (all packets that were generated from generator)
+    double effNumPacket;                // Efficient number of packets (that actual enter to the queue)
 
     simtime_t pollingMoment;            // The last polling moment of this queue
     simtime_t leavingMoment;            // The moment when server completes serving this queue and leaves it
@@ -24,6 +26,10 @@ private:
     cMessage *batchServDoneEvent;       // A batch of packet has been served
     std::vector<cMessage *> batch;      // Current servicing batch
 
+    // Output statistics
+    double lossRate;                    // Loss rate of the queue
+    double effArrivalRate;              // Effective arrival rate of the queue
+    double queueLen;                    // The length of queue at any time
     cStdDev queueLenAtPollingMoment;    // Queue length at its polling moment
     cStdDev waitingTime;                // The waiting time sequence of all packets
     cStdDev sojTime;                    // The sojourn time sequence of all packets
@@ -55,14 +61,20 @@ void CyclicGatedBatchQueue::initialize() {
     ownIndex = par("ownIndex");
     buffer.setName("buffer");
     queueCapacity = par("queueCapacity");
-    queueLen = 0;
+    currQueueLen = 0;
     servLen = 0;
     batchSize = par("batchSize");
     sizeOfCurrBatch = 0;
     cycleNumber = 0;
+    numPacket = 0;
+    effNumPacket = 0;
 
     pollingMoment = 0;
     leavingMoment = 0;
+
+    lossRate = 0;
+    effArrivalRate = 0;
+    queueLen = 0;
 
     takeBatchEvent = new cMessage("Taking a batch of packet out of the buffer");
     batchServDoneEvent = new cMessage("A batch of packet has been served");
@@ -72,6 +84,22 @@ void CyclicGatedBatchQueue::initialize() {
 }
 
 void CyclicGatedBatchQueue::finish() {
+    std::string lossRateNameString = "Mean loss rate in queue[" + std::to_string(ownIndex) + "]";
+    const char *lossRateName = lossRateNameString.c_str();
+    lossRate = 1 - effNumPacket/numPacket;
+    recordScalar(lossRateName, lossRate);
+
+    std::string effArrivalRateNameString = "Mean effective arrival rate in queue[" + std::to_string(ownIndex) + "]";
+    const char *effArrivalRateName = effArrivalRateNameString.c_str();
+    effArrivalRate = effNumPacket/simTime();
+    recordScalar(effArrivalRateName, effArrivalRate);
+
+    std::string queueLenNameString = "Mean queue length in queue[" + std::to_string(ownIndex) + "]";
+    const char *queueLenName = queueLenNameString.c_str();
+    // Formula Little: L_i = W_i * lambdaE_i
+    queueLen = sojTime.getMean()*effArrivalRate;
+    recordScalar(queueLenName, queueLen);
+
     std::string queueLenAtPollingMomentNameString = "Mean queue length at its polling moment in queue[" + std::to_string(ownIndex) + "]";
     const char *queueLenAtPollingMomentName = queueLenAtPollingMomentNameString.c_str();
     recordScalar(queueLenAtPollingMomentName, queueLenAtPollingMoment.getMean());
@@ -121,9 +149,9 @@ void CyclicGatedBatchQueue::handleMessage(cMessage *msg) {
 //        EV << "Current cycle in Q[" << ownIndex << "] = "
 //                << cycleNumber << "\n";
 
-        queueLen = buffer.getLength();
-        servLen = queueLen;
-        if (queueLen == 0) {
+        currQueueLen = buffer.getLength();
+        servLen = currQueueLen;
+        if (currQueueLen == 0) {
             // Send "Queue is empty" msg to the server
             send(new cMessage("Queue is empty", ownIndex), "server$o");
             leavingMoment = simTime();
@@ -161,7 +189,7 @@ void CyclicGatedBatchQueue::handleMessage(cMessage *msg) {
 
             // Send out the batch to the server
             send(batch[i], "server$o");
-            queueLen--;
+            currQueueLen--;
             servLen--;
         }
 
@@ -175,11 +203,14 @@ void CyclicGatedBatchQueue::handleMessage(cMessage *msg) {
     }
 
     // Insert packet from the generator to the buffer if there is space for it
-    else
-        if (queueLen < queueCapacity) {
+    else {
+        numPacket++;
+        if (currQueueLen < queueCapacity) {
             buffer.insert(msg);
-            queueLen++;
+            currQueueLen++;
+            effNumPacket++;
         }
         else
             delete(msg);
+    }
 }

@@ -67,6 +67,7 @@ inline void doParsimUnpacking(omnetpp::cCommBuffer *b, ServerPhase& e) { int n; 
  *     int queueIndex;				// Queue's index
  *     int q;						// Queue's flag
  *     int n;						// Number of packets in queue
+ *     int kc;						// k current (current batch size)
  * }
  * </pre>
  */
@@ -78,6 +79,7 @@ class StateMessage : public ::omnetpp::cMessage
     int queueIndex = 0;
     int q = 0;
     int n = 0;
+    int kc = 0;
 
   private:
     void copy(const StateMessage& other);
@@ -108,6 +110,9 @@ class StateMessage : public ::omnetpp::cMessage
 
     virtual int getN() const;
     virtual void setN(int n);
+
+    virtual int getKc() const;
+    virtual void setKc(int kc);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const StateMessage& obj) {obj.parsimPack(b);}

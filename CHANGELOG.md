@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.8.3] - 2023-07-11
+### Added
+- In the batch service systems with monitor:
++ Added Cyclic Batch Exhaustive With 2 Queues And Monitor system to measure the probability of states of 2 queue system
++ Added a state variable kc (k current)
+- In 2 base batch service systems without monitor (CyclicExhaustiveBatchPollingSystem and CyclicGatedBatchPollingSystem):
++ Added output value of mean loss rate of each queue: Ploss[i]
++ Added output value of effective arrival rate of each queue: lambdE[i]
++ Added output value of L[i] (average length of queue Q[i]) by Little formula (L[i] = W[i]*lambdaE[i]), since mean sojorn time W[i] has been measured.
++ Renamed the variable queueLen to currQueueLen to avoid confusion with L[i]
+
 ## [v0.8.2.2] - 2023-07-03
 ### Fixed
 - Fixed some other bugs in MonitorFor3BatchQueues module.

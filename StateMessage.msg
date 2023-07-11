@@ -18,4 +18,5 @@ message StateMessage {
     int queueIndex;				// Queue's index
     int q;						// Queue's flag
     int n;						// Number of packets in queue
+    int kc;						// k current (current batch size)
 }

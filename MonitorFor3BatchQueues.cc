@@ -12,6 +12,7 @@ private:
     int serverPhase;                        // Server phase
     int queueIndex;                         // Queue's index
     std::vector<int> n;                     // Current number of packets in the queues
+    int kc;                                 // k current (current batch size)
 
     StateMessage *statsCollectionEvent;     // Start collecting statistics
 
@@ -25,30 +26,31 @@ private:
     constexpr static int qCap1 = 20;                    // Capacity of queues
     constexpr static int qCap2 = 20;
     constexpr static int qCap3 = 20;
+    constexpr static int maxKc = 5;                    // Max of kc
 
-    cStdDev C1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    bool isC1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    simtime_t startOfC1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    cStdDev C1_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    bool isC1_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    simtime_t startOfC1_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
 
-    cStdDev C2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    bool isC2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    simtime_t startOfC2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    cStdDev C2_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    bool isC2_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    simtime_t startOfC2_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
 
-    cStdDev C3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    bool isC3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    simtime_t startOfC3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    cStdDev C3_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    bool isC3_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    simtime_t startOfC3_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
 
-    cStdDev S1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    bool isS1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    simtime_t startOfS1_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    cStdDev S1_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    bool isS1_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    simtime_t startOfS1_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
 
-    cStdDev S2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    bool isS2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    simtime_t startOfS2_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    cStdDev S2_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    bool isS2_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    simtime_t startOfS2_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
 
-    cStdDev S3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    bool isS3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
-    simtime_t startOfS3_n1_n2_n3[qCap1+1][qCap2+1][qCap3+1];
+    cStdDev S3_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    bool isS3_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
+    simtime_t startOfS3_n1_n2_n3_kc[qCap1+1][qCap2+1][qCap3+1][maxKc+1];
 
 public:
     MonitorFor3BatchQueues();
@@ -75,33 +77,35 @@ void MonitorFor3BatchQueues::initialize() {
     queueIndex = 0;
     for (int i = 0; i < numQueues; i++)
         n.push_back(0);
+    kc = 0;
 
     // States with only serverPhase variable
     isC1 = isC2 = isC3 = isS1 = isS2 = isS3 = false;
     startOfC1 = startOfC2 = startOfC3 = startOfS1 = startOfS2 = startOfS3 = 0;
 
-    // States with all variables: serverPhase, n1, n2, n3
+    // States with all variables: serverPhase, n1, n2, n3, kc
     for (int i = 0; i <= qCap1; i++)
         for (int j = 0; j <= qCap2; j++)
-            for (int k = 0; k <= qCap3; k++) {
-                isC1_n1_n2_n3[i][j][k] = false;
-                startOfC1_n1_n2_n3[i][j][k] = 0;
+            for (int k = 0; k <= qCap3; k++)
+                for (int h = 0; h <= maxKc; h++) {
+                    isC1_n1_n2_n3_kc[i][j][k][h] = false;
+                    startOfC1_n1_n2_n3_kc[i][j][k][h] = 0;
 
-                isC2_n1_n2_n3[i][j][k] = false;
-                startOfC2_n1_n2_n3[i][j][k] = 0;
+                    isC2_n1_n2_n3_kc[i][j][k][h] = false;
+                    startOfC2_n1_n2_n3_kc[i][j][k][h] = 0;
 
-                isC3_n1_n2_n3[i][j][k] = false;
-                startOfC3_n1_n2_n3[i][j][k] = 0;
+                    isC3_n1_n2_n3_kc[i][j][k][h] = false;
+                    startOfC3_n1_n2_n3_kc[i][j][k][h] = 0;
 
-                isS1_n1_n2_n3[i][j][k] = false;
-                startOfS1_n1_n2_n3[i][j][k] = 0;
+                    isS1_n1_n2_n3_kc[i][j][k][h] = false;
+                    startOfS1_n1_n2_n3_kc[i][j][k][h] = 0;
 
-                isS2_n1_n2_n3[i][j][k] = false;
-                startOfS2_n1_n2_n3[i][j][k] = 0;
+                    isS2_n1_n2_n3_kc[i][j][k][h] = false;
+                    startOfS2_n1_n2_n3_kc[i][j][k][h] = 0;
 
-                isS3_n1_n2_n3[i][j][k] = false;
-                startOfS3_n1_n2_n3[i][j][k] = 0;
-            }
+                    isS3_n1_n2_n3_kc[i][j][k][h] = false;
+                    startOfS3_n1_n2_n3_kc[i][j][k][h] = 0;
+                }
 
     statsCollectionEvent = new StateMessage("Collecting statistics");
 }
@@ -118,56 +122,68 @@ void MonitorFor3BatchQueues::finish() {
     // States with all variables: serverPhase, n1, n2, n3
     for (int i = 0; i <= qCap1; i++)
         for (int j = 0; j <= qCap2; j++)
-            for (int k = 0; k <= qCap3; k++) {
+            for (int k = 0; k <= qCap3; k++)
+                for (int h = 0; h <= maxKc; h++) {
                     std::string nameString = "Probability C1_" + std::to_string(i)
-                            + "_" + std::to_string(j) + "_" + std::to_string(k);
+                            + "_" + std::to_string(j) + "_" + std::to_string(k)
+                            + "_" + std::to_string(h);
                     const char *name = nameString.c_str();
-                    recordScalar(name, C1_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
+                    recordScalar(name, C1_n1_n2_n3_kc[i][j][k][h].getSum() * 100 / simTime());
                 }
 
     for (int i = 0; i <= qCap1; i++)
         for (int j = 0; j <= qCap2; j++)
-            for (int k = 0; k <= qCap3; k++) {
+            for (int k = 0; k <= qCap3; k++)
+                for (int h = 0; h <= maxKc; h++) {
                     std::string nameString = "Probability C2_" + std::to_string(i)
-                            + "_" + std::to_string(j) + "_" + std::to_string(k);
+                            + "_" + std::to_string(j) + "_" + std::to_string(k)
+                            + "_" + std::to_string(h);
                     const char *name = nameString.c_str();
-                    recordScalar(name, C2_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
+                    recordScalar(name, C2_n1_n2_n3_kc[i][j][k][h].getSum() * 100 / simTime());
                 }
 
     for (int i = 0; i <= qCap1; i++)
         for (int j = 0; j <= qCap2; j++)
-            for (int k = 0; k <= qCap3; k++) {
+            for (int k = 0; k <= qCap3; k++)
+                for (int h = 0; h <= maxKc; h++) {
                     std::string nameString = "Probability C3_" + std::to_string(i)
-                            + "_" + std::to_string(j) + "_" + std::to_string(k);
+                            + "_" + std::to_string(j) + "_" + std::to_string(k)
+                            + "_" + std::to_string(h);
                     const char *name = nameString.c_str();
-                    recordScalar(name, C3_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
+                    recordScalar(name, C3_n1_n2_n3_kc[i][j][k][h].getSum() * 100 / simTime());
                 }
 
     for (int i = 0; i <= qCap1; i++)
         for (int j = 0; j <= qCap2; j++)
-            for (int k = 0; k <= qCap3; k++) {
+            for (int k = 0; k <= qCap3; k++)
+                for (int h = 0; h <= maxKc; h++) {
                     std::string nameString = "Probability S1_" + std::to_string(i)
-                            + "_" + std::to_string(j) + "_" + std::to_string(k);
+                            + "_" + std::to_string(j) + "_" + std::to_string(k)
+                            + "_" + std::to_string(h);
                     const char *name = nameString.c_str();
-                    recordScalar(name, S1_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
+                    recordScalar(name, S1_n1_n2_n3_kc[i][j][k][h].getSum() * 100 / simTime());
                 }
 
     for (int i = 0; i <= qCap1; i++)
         for (int j = 0; j <= qCap2; j++)
-            for (int k = 0; k <= qCap3; k++) {
+            for (int k = 0; k <= qCap3; k++)
+                for (int h = 0; h <= maxKc; h++) {
                     std::string nameString = "Probability S2_" + std::to_string(i)
-                            + "_" + std::to_string(j) + "_" + std::to_string(k);
+                            + "_" + std::to_string(j) + "_" + std::to_string(k)
+                            + "_" + std::to_string(h);
                     const char *name = nameString.c_str();
-                    recordScalar(name, S2_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
+                    recordScalar(name, S2_n1_n2_n3_kc[i][j][k][h].getSum() * 100 / simTime());
                 }
 
     for (int i = 0; i <= qCap1; i++)
         for (int j = 0; j <= qCap2; j++)
-            for (int k = 0; k <= qCap3; k++) {
+            for (int k = 0; k <= qCap3; k++)
+                for (int h = 0; h <= maxKc; h++) {
                     std::string nameString = "Probability S3_" + std::to_string(i)
-                            + "_" + std::to_string(j) + "_" + std::to_string(k);
+                            + "_" + std::to_string(j) + "_" + std::to_string(k)
+                            + "_" + std::to_string(h);
                     const char *name = nameString.c_str();
-                    recordScalar(name, S3_n1_n2_n3[i][j][k].getSum() * 100 / simTime());
+                    recordScalar(name, S3_n1_n2_n3_kc[i][j][k][h].getSum() * 100 / simTime());
                 }
 
 }
@@ -179,13 +195,15 @@ void MonitorFor3BatchQueues::handleMessage(cMessage *msg) {
     if (stateMsg->getMsgType() == SET_SERVER_PHASE) {
         serverPhase = stateMsg->getServerPhase();
         queueIndex = stateMsg->getQueueIndex();
+        kc = stateMsg->getKc();
         delete stateMsg;
 
         EV << serverPhase << "[" <<
                 queueIndex+1 << "], " <<
                 n[0] << ", " <<
                 n[1] << ", " <<
-                n[2] << "\n";
+                n[2] << "," <<
+                kc << "\n";
 
         scheduleAt(simTime(), statsCollectionEvent);
     }
@@ -199,7 +217,8 @@ void MonitorFor3BatchQueues::handleMessage(cMessage *msg) {
                 queueIndex+1 << "], " <<
                 n[0] << ", " <<
                 n[1] << ", " <<
-                n[2] << "\n";
+                n[2] << "," <<
+                kc << "\n";
 
         scheduleAt(simTime(), statsCollectionEvent);
     }
@@ -268,131 +287,144 @@ void MonitorFor3BatchQueues::handleMessage(cMessage *msg) {
         }
 
 
-        //  States with all variables: serverPhase, n1, n2, n3 --------------------------------
-        for (int i = 0; i < qCap1; i++)
-            for (int j = 0; j < qCap2; j++)
-                for (int k = 0; k < qCap3; k++) {
-                    // C1_n1_n2_n3
-                    if (serverPhase == CONNECTION &&
-                            queueIndex == 0 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k &&
-                            isC1_n1_n2_n3[i][j][k] == false) {
-                        startOfC1_n1_n2_n3[i][j][k] = simTime();
-                        isC1_n1_n2_n3[i][j][k] = true;
-                    }
-                    else if (!(serverPhase == CONNECTION &&
-                            queueIndex == 0 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k) &&
-                            isC1_n1_n2_n3[i][j][k] == true) {
-                        C1_n1_n2_n3[i][j][k].collect(simTime() - startOfC1_n1_n2_n3[i][j][k]);
-                        isC1_n1_n2_n3[i][j][k] = false;
-                    }
+        //  States with all variables: serverPhase, n1, n2, n3, kc --------------------------------
+        for (int i = 0; i <= qCap1; i++)
+            for (int j = 0; j <= qCap2; j++)
+                for (int k = 0; k <= qCap3; k++)
+                    for (int h = 0; h <= maxKc; h++) {
+                        // C1_n1_n2_n3_kc
+                        if (serverPhase == CONNECTION &&
+                                queueIndex == 0 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h &&
+                                isC1_n1_n2_n3_kc[i][j][k][h] == false) {
+                            startOfC1_n1_n2_n3_kc[i][j][k][h] = simTime();
+                            isC1_n1_n2_n3_kc[i][j][k][h] = true;
+                        }
+                        else if (!(serverPhase == CONNECTION &&
+                                queueIndex == 0 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h) &&
+                                isC1_n1_n2_n3_kc[i][j][k][h] == true) {
+                            C1_n1_n2_n3_kc[i][j][k][h].collect(simTime() - startOfC1_n1_n2_n3_kc[i][j][k][h]);
+                            isC1_n1_n2_n3_kc[i][j][k][h] = false;
+                        }
 
-                    // C2_n1_n2_n3
-                    if (serverPhase == CONNECTION &&
-                            queueIndex == 1 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k &&
-                            isC2_n1_n2_n3[i][j][k] == false) {
-                        startOfC2_n1_n2_n3[i][j][k] = simTime();
-                        isC2_n1_n2_n3[i][j][k] = true;
-                    }
-                    else if (!(serverPhase == CONNECTION &&
-                            queueIndex == 1 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k) &&
-                            isC2_n1_n2_n3[i][j][k] == true) {
-                        C2_n1_n2_n3[i][j][k].collect(simTime() - startOfC2_n1_n2_n3[i][j][k]);
-                        isC2_n1_n2_n3[i][j][k] = false;
-                    }
+                        // C2_n1_n2_n3_kc
+                        if (serverPhase == CONNECTION &&
+                                queueIndex == 1 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h &&
+                                isC2_n1_n2_n3_kc[i][j][k][h] == false) {
+                            startOfC2_n1_n2_n3_kc[i][j][k][h] = simTime();
+                            isC2_n1_n2_n3_kc[i][j][k][h] = true;
+                        }
+                        else if (!(serverPhase == CONNECTION &&
+                                queueIndex == 1 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h) &&
+                                isC2_n1_n2_n3_kc[i][j][k][h] == true) {
+                            C2_n1_n2_n3_kc[i][j][k][h].collect(simTime() - startOfC2_n1_n2_n3_kc[i][j][k][h]);
+                            isC2_n1_n2_n3_kc[i][j][k][h] = false;
+                        }
 
-                    // C3_n1_n2_n3
-                    if (serverPhase == CONNECTION &&
-                            queueIndex == 2 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k &&
-                            isC3_n1_n2_n3[i][j][k] == false) {
-                        startOfC3_n1_n2_n3[i][j][k] = simTime();
-                        isC3_n1_n2_n3[i][j][k] = true;
-                    }
-                    else if (!(serverPhase == CONNECTION &&
-                            queueIndex == 2 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k) &&
-                            isC3_n1_n2_n3[i][j][k] == true) {
-                        C3_n1_n2_n3[i][j][k].collect(simTime() - startOfC3_n1_n2_n3[i][j][k]);
-                        isC3_n1_n2_n3[i][j][k] = false;
-                    }
+                        // C3_n1_n2_n3_kc
+                        if (serverPhase == CONNECTION &&
+                                queueIndex == 2 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h &&
+                                isC3_n1_n2_n3_kc[i][j][k][h] == false) {
+                            startOfC3_n1_n2_n3_kc[i][j][k][h] = simTime();
+                            isC3_n1_n2_n3_kc[i][j][k][h] = true;
+                        }
+                        else if (!(serverPhase == CONNECTION &&
+                                queueIndex == 2 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h) &&
+                                isC3_n1_n2_n3_kc[i][j][k][h] == true) {
+                            C3_n1_n2_n3_kc[i][j][k][h].collect(simTime() - startOfC3_n1_n2_n3_kc[i][j][k][h]);
+                            isC3_n1_n2_n3_kc[i][j][k][h] = false;
+                        }
 
-                    // S1_n1_n2_n3
-                    if (serverPhase == SERVICE &&
-                            queueIndex == 0 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k &&
-                            isS1_n1_n2_n3[i][j][k] == false) {
-                        startOfS1_n1_n2_n3[i][j][k] = simTime();
-                        isS1_n1_n2_n3[i][j][k] = true;
-                    }
-                    else if (!(serverPhase == SERVICE &&
-                            queueIndex == 0 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k) &&
-                            isS1_n1_n2_n3[i][j][k] == true) {
-                        S1_n1_n2_n3[i][j][k].collect(simTime() - startOfS1_n1_n2_n3[i][j][k]);
-                        isS1_n1_n2_n3[i][j][k] = false;
-                    }
+                        // S1_n1_n2_n3_kc
+                        if (serverPhase == SERVICE &&
+                                queueIndex == 0 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h &&
+                                isS1_n1_n2_n3_kc[i][j][k][h] == false) {
+                            startOfS1_n1_n2_n3_kc[i][j][k][h] = simTime();
+                            isS1_n1_n2_n3_kc[i][j][k][h] = true;
+                        }
+                        else if (!(serverPhase == SERVICE &&
+                                queueIndex == 0 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h) &&
+                                isS1_n1_n2_n3_kc[i][j][k][h] == true) {
+                            S1_n1_n2_n3_kc[i][j][k][h].collect(simTime() - startOfS1_n1_n2_n3_kc[i][j][k][h]);
+                            isS1_n1_n2_n3_kc[i][j][k][h] = false;
+                        }
 
-                    // S2_n1_n2_n3
-                    if (serverPhase == SERVICE &&
-                            queueIndex == 1 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k &&
-                            isS2_n1_n2_n3[i][j][k] == false) {
-                        startOfS2_n1_n2_n3[i][j][k] = simTime();
-                        isS2_n1_n2_n3[i][j][k] = true;
-                    }
-                    else if (!(serverPhase == SERVICE &&
-                            queueIndex == 1 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k) &&
-                            isS2_n1_n2_n3[i][j][k] == true) {
-                        S2_n1_n2_n3[i][j][k].collect(simTime() - startOfS2_n1_n2_n3[i][j][k]);
-                        isS2_n1_n2_n3[i][j][k] = false;
-                    }
+                        // S2_n1_n2_n3_kc
+                        if (serverPhase == SERVICE &&
+                                queueIndex == 1 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h &&
+                                isS2_n1_n2_n3_kc[i][j][k][h] == false) {
+                            startOfS2_n1_n2_n3_kc[i][j][k][h] = simTime();
+                            isS2_n1_n2_n3_kc[i][j][k][h] = true;
+                        }
+                        else if (!(serverPhase == SERVICE &&
+                                queueIndex == 1 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h) &&
+                                isS2_n1_n2_n3_kc[i][j][k][h] == true) {
+                            S2_n1_n2_n3_kc[i][j][k][h].collect(simTime() - startOfS2_n1_n2_n3_kc[i][j][k][h]);
+                            isS2_n1_n2_n3_kc[i][j][k][h] = false;
+                        }
 
-                    // S3_n1_n2_n3
-                    if (serverPhase == SERVICE &&
-                            queueIndex == 2 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k &&
-                            isS3_n1_n2_n3[i][j][k] == false) {
-                        startOfS3_n1_n2_n3[i][j][k] = simTime();
-                        isS3_n1_n2_n3[i][j][k] = true;
-                    }
-                    else if (!(serverPhase == SERVICE &&
-                            queueIndex == 2 &&
-                            n[0] == i &&
-                            n[1] == j &&
-                            n[2] == k) &&
-                            isS3_n1_n2_n3[i][j][k] == true) {
-                        S3_n1_n2_n3[i][j][k].collect(simTime() - startOfS3_n1_n2_n3[i][j][k]);
-                        isS3_n1_n2_n3[i][j][k] = false;
-                    }
+                        // S3_n1_n2_n3_kc
+                        if (serverPhase == SERVICE &&
+                                queueIndex == 2 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h &&
+                                isS3_n1_n2_n3_kc[i][j][k][h] == false) {
+                            startOfS3_n1_n2_n3_kc[i][j][k][h] = simTime();
+                            isS3_n1_n2_n3_kc[i][j][k][h] = true;
+                        }
+                        else if (!(serverPhase == SERVICE &&
+                                queueIndex == 2 &&
+                                n[0] == i &&
+                                n[1] == j &&
+                                n[2] == k &&
+                                kc == h) &&
+                                isS3_n1_n2_n3_kc[i][j][k][h] == true) {
+                            S3_n1_n2_n3_kc[i][j][k][h].collect(simTime() - startOfS3_n1_n2_n3_kc[i][j][k][h]);
+                            isS3_n1_n2_n3_kc[i][j][k][h] = false;
+                        }
 
 
-                }
+                    }
     }
 }
